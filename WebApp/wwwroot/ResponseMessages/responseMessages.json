@@ -1,0 +1,10 @@
+{
+  "Messages": {
+    "Success": "Request has been processed.",
+    "Error": "Oops. Something went wrong. Please try again later.",
+    "DataNotFound": "No results found.",
+    "PasswordNotMatch": "Current password does not match.",
+    "ValidationError": "Validation failed for one or more entities.",
+    "DuplicateValidationError": "Validation failed: Cannot add/update duplicate record."
+  }
+}

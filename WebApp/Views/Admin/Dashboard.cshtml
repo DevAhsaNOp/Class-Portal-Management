@@ -1,0 +1,284 @@
+﻿@using Application.ClientFeatures.Admin.Response
+@model UserAndInstructorDetails
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sidebar 01</title>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900"
+          rel="stylesheet" />
+
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="~/assests/css/style.css" />
+    <style>
+        .table th, .table td {
+            vertical-align: baseline !important;
+            text-align: center !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper d-flex align-items-stretch">
+        <nav id="sidebar">
+            <div class="p-4 pt-5">
+                <a href="#"
+                   class="img logo rounded-circle mb-5"
+                   style="background-image: url(../assests/images/logo.jpg)"></a>
+                <ul class="list-unstyled components mb-5">
+                    <li class="active">
+                        <a href="#homeSubmenu"
+                           data-toggle="collapse"
+                           aria-expanded="false"
+                           class="dropdown-toggle">Home</a>
+                        <ul class="collapse list-unstyled" id="homeSubmenu">
+                            <li>
+                                <a href="#">Home 1</a>
+                            </li>
+                            <li>
+                                <a href="#">Home 2</a>
+                            </li>
+                            <li>
+                                <a href="#">Home 3</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">About</a>
+                    </li>
+                    <li>
+                        <a href="#pageSubmenu"
+                           data-toggle="collapse"
+                           aria-expanded="false"
+                           class="dropdown-toggle">Pages</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu">
+                            <li>
+                                <a href="#">Page 1</a>
+                            </li>
+                            <li>
+                                <a href="#">Page 2</a>
+                            </li>
+                            <li>
+                                <a href="#">Page 3</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">Portfolio</a>
+                    </li>
+                    <li>
+                        <a href="#">Contact</a>
+                    </li>
+                </ul>
+
+                <div class="footer">
+                    <p>
+                        Copyright &copy;
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                        All rights reserved | This template is made with
+                        <i class="icon-heart" aria-hidden="true"></i> by
+                        <a href="https://colorlib.com" target="_blank">Colorlib.com</a>
+                    </p>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content" class="p-3">
+            <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                <i class="fa fa-bars"></i>
+                <span class="sr-only">Toggle Menu</span>
+            </button>
+
+            <h2 class="my-4 font-weight-bolder">Welcome Back Admin</h2>
+
+            @if (Model.NonActiveUsers is not null && Model.NonActiveUsers.Count > 0)
+            {
+                <h3 class="my-4 font-weight-normal bg-secondary text-white p-2 rounded d-inline">Users Waiting For Approval</h3>
+
+                <table class="table my-3 table-bordered">
+                    <thead class="table-info">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Fullname</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Joined At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int x = 1;
+                            foreach (var user in Model.NonActiveUsers)
+                            {
+                                <tr>
+                                    <th scope="row">@x</th>
+                                    <td><img src="@user.Image" width="50" height="50" alt="UserImage @user.Username" /></td>
+                                    <td>@user.FullName</td>
+                                    <td>@user.Username</td>
+                                    <td>@user.Email</td>
+                                    @if (user.Status == 1)
+                                    {
+                                        <td>
+                                            <span class="badge badge-success" style="font-size: 12px">Active</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <span class="badge badge-danger" style="font-size: 12px">Inactive</span>
+                                        </td>
+                                    }
+                                    <td>@user.CreatedAt.Value.ToString("dd-MM-yyyy hh:mm tt")</td>
+                                </tr>
+                                x++;
+                            }
+                        }
+                        <tr>
+                            <th class="text-center" colspan="7">
+                                <button class="btn btn-info">
+                                    View All
+                                </button>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            }
+
+            @if (Model.Users is not null && Model.Users.Count > 0)
+            {
+                <h3 class="my-4 font-weight-normal bg-primary text-white p-2 rounded d-inline">Newly Enrolled Users</h3>
+                <button class="btn btn-success float-right">Add New User</button>
+
+                <table class="table my-3 table-bordered">
+                    <thead class="table-info">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Fullname</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Joined At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 1;
+                            foreach (var user in Model.Users)
+                            {
+                                <tr>
+                                    <th scope="row">@i</th>
+                                    <td><img src="@user.Image" width="50" height="50" alt="UserImage @user.Username" /></td>
+                                    <td>@user.FullName</td>
+                                    <td>@user.Username</td>
+                                    <td>@user.Email</td>
+                                    @if (user.Status == 1)
+                                    {
+                                        <td>
+                                            <span class="badge badge-success" style="font-size: 12px">Active</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <span class="badge badge-danger" style="font-size: 12px">Inactive</span>
+                                        </td>
+                                    }
+                                    <td>@user.CreatedAt.Value.ToString("dd-MM-yyyy hh:mm tt")</td>
+                                </tr>
+                                i++;
+                            }
+                        }
+                        <tr>
+                            <th class="text-center" colspan="7">
+                                <button class="btn btn-info">
+                                    View All
+                                </button>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            }
+
+            @if (Model.Instructors is not null && Model.Instructors.Count > 0)
+            {
+                <h3 class="my-4 font-weight-normal bg-primary text-white p-2 rounded d-inline">Newly Joined Instructors</h3>
+                <button class="btn btn-success float-right">Add New Instructor</button>
+
+                <table class="table my-3 table-bordered">
+                    <thead class="table-info">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Fullname</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Qualification</th>
+                            <th scope="col">Gender</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Joined At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int j = 1;
+                            foreach (var user in Model.Instructors)
+                            {
+                                <tr>
+                                    <th scope="row">@j</th>
+                                    <td><img src="@user.Image" width="50" height="50" alt="UserImage @user.Username" /></td>
+                                    <td>@user.FullName</td>
+                                    <td>@user.Username</td>
+                                    <td>@user.Email</td>
+                                    <td>@user.Qualification</td>
+                                    <td>@user.Gender</td>
+                                    @if (user.Status == 1)
+                                    {
+                                        <td>
+                                            <span class="badge badge-success" style="font-size: 12px">Active</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <span class="badge badge-danger" style="font-size: 12px">Inactive</span>
+                                        </td>
+                                    }
+                                    <td>@user.CreatedAt.Value.ToString("dd-MM-yyyy hh:mm tt")</td>
+                                </tr>
+                                j++;
+                            }
+                        }
+                        <tr>
+                            <th class="text-center" colspan="9">
+                                <button class="btn btn-info">
+                                    View All
+                                </button>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            }
+
+        </div>
+    </div>
+
+    <script src="~/assests/js/jquery.min.js"></script>
+    <script src="~/assests/js/popper.js"></script>
+    <script src="~/assests/js/bootstrap.min.js"></script>
+    <script src="~/assests/js/main.js"></script>
+</body>
+</html>
