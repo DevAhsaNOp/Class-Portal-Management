@@ -101,6 +101,7 @@ namespace WebApp.Controllers
             return View(user);
         }
 
+        [AllowAnonymous]
         public async Task<JsonResult> IsEmailExist(string Email)
         {
             var result = await _user.IsEmailExits(Email);

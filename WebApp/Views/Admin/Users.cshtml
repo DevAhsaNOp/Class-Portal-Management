@@ -1,0 +1,65 @@
+﻿@using Application.ClientFeatures.User.Response
+@model List<UserResponse>
+
+@{
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="my-4 font-weight-normal bg-info text-white p-2 rounded">Enrolled Users List</h3>
+            <button class="btn btn-success float-right">Add New User</button>
+        </div>
+        <div class="col-md-12">
+            <h1>Users</h1>
+            <table class="table table-bordered">
+                <thead class="table-info">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">UserId</th>
+                        <th scope="col">FullName</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Enrolled Date</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var count = 1;
+                        foreach (var user in Model)
+                        {
+                            <tr>
+                                <td scope="row">@count</td>
+                                <td>@user.Id</td>
+                                <td>@user.FullName</td>
+                                <td>@user.Username</td>
+                                <td>@user.Email</td>
+                                <td>@user.Role</td>
+                                @if (user.Status == 1)
+                                {
+                                    <td><span class="badge badge-success" style="font-size: 12px !important">Active</span></td>
+                                }
+                                else
+                                {
+                                    <td><span class="badge badge-danger" style="font-size: 12px !important">Inactive</span></td>
+                                    
+                                }
+                                <td>@user.CreatedAt.Value.ToString("dd-MM-yyyy hh:mm tt")</td>
+                                <td>
+                                    <a href="@Url.Action("EditUser", "Admin", new { id = user.Id })" class="btn btn-primary">Edit</a>
+                                    <a href="@Url.Action("Delete", "Admin", new { id = user.Id })" class="btn btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                            count++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

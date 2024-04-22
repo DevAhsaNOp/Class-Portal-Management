@@ -21,10 +21,11 @@ namespace Persistence
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<DataContext>(opt => opt.UseSqlServer(connectionString));
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IHelper, HelperRepository>();
-            services.AddScoped<IAdmin, AdminRepository>();
             services.AddScoped<IUser, UserRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IAdmin, AdminRepository>();
+            services.AddScoped<IClass, ClassRepository>();
+            services.AddScoped<IHelper, HelperRepository>();
             services.AddScoped<IInstructor, InstructorRepository>();
             services.AddScoped<ICustomLogHandler>(_ => new CustomLogHandler("Logs"));
         }

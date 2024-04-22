@@ -1,0 +1,67 @@
+﻿@using Application.ClientFeatures.Instructor.Response
+@model List<InstructorResponse>
+
+@{
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="my-4 font-weight-normal bg-info text-white p-2 rounded">Joined Instructors List</h3>
+            <button class="btn btn-success float-right">Add New Instructor</button>
+        </div>
+        <div class="col-md-12">
+            <h1>Instructors</h1>
+            <table class="table table-bordered">
+                <thead class="table-info">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">InstructorId</th>
+                        <th scope="col">FullName</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Qualification</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Joined Date</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var count = 1;
+                        foreach (var user in Model)
+                        {
+                            <tr>
+                                <td scope="row">@count</td>
+                                <td>@user.Id</td>
+                                <td>@user.FullName</td>
+                                <td>@user.Username</td>
+                                <td>@user.Email</td>
+                                <td>@user.Gender</td>
+                                <td>@user.Qualification</td>
+                                @if (user.Status == 1)
+                                {
+                                    <td><span class="badge badge-success" style="font-size: 12px !important">Active</span></td>
+                                }
+                                else
+                                {
+                                    <td><span class="badge badge-danger" style="font-size: 12px !important">Inactive</span></td>
+
+                                }
+                                <td>@user.CreatedAt.Value.ToString("dd-MM-yyyy hh:mm tt")</td>
+                                <td>
+                                    <a href="@Url.Action("Edit", "Instructors", new { id = user.Id })" class="btn btn-primary">Edit</a>
+                                    <a href="@Url.Action("Delete", "Instructors", new { id = user.Id })" class="btn btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                            count++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

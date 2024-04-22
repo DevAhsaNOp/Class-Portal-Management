@@ -65,7 +65,7 @@ public sealed record UserUpdateRequest
     [Required(ErrorMessage = "*")]
     [RegularExpression("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", ErrorMessage = "Invalid Email Address")]
     [StringLength(50, MinimumLength = 4, ErrorMessage = "Email should be between 4 to 150 characters.")]
-    [Remote("IsEmailExist", "Account", ErrorMessage = "Email already exists.")]
+    //[Remote("IsEmailExist", "Account", ErrorMessage = "Email already exists.")]
     public string Email { get; set; }
 
     [Required(ErrorMessage = "*")]
