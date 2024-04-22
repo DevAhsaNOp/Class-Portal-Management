@@ -1,4 +1,5 @@
-﻿using Application.ClientFeatures.User.Request;
+﻿using Application.ClientFeatures.Admin.Response;
+using Application.ClientFeatures.User.Request;
 using Application.ClientFeatures.User.Response;
 using Application.ClientFeatures.User.Validator;
 using Application.Common.Behaviors;
@@ -49,26 +50,21 @@ namespace Persistence.Repositories.ClientRepositories
             _instructor = instructor;
         }
 
-        public async Task<List<UserResponse>> GetByStatuses(CancellationToken cancellationToken)
+        public async Task<List<UserResponseV2>> GetByStatuses(CancellationToken cancellationToken)
         {
             var list = await FilterIQueryable(x => true)
-                .Select(x => new UserResponse
+                .Select(x => new UserResponseV2
                 {
                     Id = x.Id,
                     FullName = x.FullName,
                     Email = x.Email,
                     Image = string.IsNullOrEmpty(x.Image) ? string.Empty : string.Concat(AppSetting.DocumentUrl, "\\Assets\\", x.Image),
                     Username = x.Username,
-                    Password = x.Password,
                     Status = x.Status,
                     Role = "User",
                     CreatedAt = x.CreatedAt,
-                    CreatedBy = x.CreatedBy,
-                    UpdatedAt = x.UpdatedAt,
-                    UpdatedBy = x.UpdatedBy,
-                    DeletedAt = x.DeletedAt,
-                    DeletedBy = x.DeletedBy,
                 })
+                .OrderByDescending(x => x.CreatedAt)
                 .ToListAsync(cancellationToken);
 
             return list;
@@ -110,7 +106,8 @@ namespace Persistence.Repositories.ClientRepositories
                 return new GenericResponse<dynamic>
                 {
                     message = _systemMessages.Error,
-                    code = HttpStatusCode.BadRequest
+                    code = HttpStatusCode.BadRequest,
+                    result = "An error occurred! Please try again later."
                 };
             }
         }
@@ -146,7 +143,10 @@ namespace Persistence.Repositories.ClientRepositories
             _mapper.Map(request, findEntity);
 
             if (request.Image is null && !string.IsNullOrEmpty(request.ProfileImage))
+            {
+                request.ProfileImage = string.IsNullOrEmpty(request.ProfileImage) ? string.Empty : request.ProfileImage.Split("Assets\\")[1];
                 findEntity.Image = request.ProfileImage;
+            }
             else
                 findEntity.Image = _helper.AddInAttachmentStore(request.Image, adminDirectoryDetail);
 
@@ -207,7 +207,8 @@ namespace Persistence.Repositories.ClientRepositories
                 return new GenericResponse<dynamic>
                 {
                     message = _systemMessages.Success,
-                    code = HttpStatusCode.OK
+                    code = HttpStatusCode.OK,
+                    result = "User Deleted Successfully!"
                 };
             }
             else
@@ -349,7 +350,7 @@ namespace Persistence.Repositories.ClientRepositories
                     result = "Request is null!"
                 };
             }
-            request.ProfileImage = string.IsNullOrEmpty(request.ProfileImage) ? string.Empty : request.ProfileImage.Split("Assets\\")[1];
+
             var findEntity = _mapper.Map<UserUpdateRequest>(request);
             return await Update(findEntity, cancellationToken);
         }
@@ -406,6 +407,104 @@ namespace Persistence.Repositories.ClientRepositories
                     message = _systemMessages.Success,
                     code = HttpStatusCode.OK,
                     result = "Password Changed Successfully! Please login again."
+                };
+            }
+            else
+            {
+                return new GenericResponse<dynamic>
+                {
+                    message = _systemMessages.Error,
+                    code = HttpStatusCode.BadRequest,
+                    result = "An error occurred! Please try again later."
+                };
+            }
+        }
+
+        public async Task<List<UserResponseV2>> GetNonActiveUsers(CancellationToken cancellationToken = default)
+        {
+            var nonActiveUsers = await FilterIQueryable(x => x.Status == 2)
+                .Select(x => new UserResponseV2
+                {
+                    Id = x.Id,
+                    FullName = x.FullName,
+                    Email = x.Email,
+                    Image = string.IsNullOrEmpty(x.Image) ? string.Empty : string.Concat(AppSetting.DocumentUrl, "\\Assets\\", x.Image),
+                    Username = x.Username,
+                    Role = "User",
+                    Status = x.Status,
+                    CreatedAt = x.CreatedAt,
+                })
+                .OrderByDescending(x => x.CreatedAt)
+                .ToListAsync(cancellationToken);
+
+            return nonActiveUsers;
+        }
+
+        public async Task<UserAndInstructorDetails> GetNewUsersAndInstructors(CancellationToken cancellationToken = default)
+        {
+            var usersList = await GetByStatuses(cancellationToken);
+
+            var instructorsList = await _instructor.GetByStatuses(cancellationToken);
+
+            var nonActiveUsersList = await GetNonActiveUsers(cancellationToken);
+
+            return new UserAndInstructorDetails
+            {
+                Users = usersList,
+                NonActiveUsers = nonActiveUsersList,
+                Instructors = instructorsList
+            };
+        }
+
+        public async Task<UserResponseV2> GetUserDetailId(long Id, CancellationToken cancellationToken = default)
+        {
+            var findEntity = await FilterIQueryable(x => x.Id == Id && x.Status == 2)
+                .Select(x => new UserResponseV2
+                {
+                    Id = x.Id,
+                    FullName = x.FullName,
+                    Email = x.Email,
+                    Image = string.IsNullOrEmpty(x.Image) ? string.Empty : string.Concat(AppSetting.DocumentUrl, "\\Assets\\", x.Image),
+                    Username = x.Username,
+                    Role = "User",
+                    Status = x.Status,
+                    CreatedAt = x.CreatedAt,
+                })
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (findEntity == null)
+            {
+                return null;
+            }
+
+            return findEntity;
+        }
+
+        public async Task<GenericResponse<dynamic>> ChangeUserStatus(UserStatusChangeRequest user, CancellationToken cancellationToken = default)
+        {
+            var findEntity = await Get(user.Id, cancellationToken);
+
+            if (findEntity == null)
+            {
+                return new GenericResponse<dynamic>
+                {
+                    message = _systemMessages.DataNotFound,
+                    code = HttpStatusCode.BadRequest
+                };
+            }
+
+            findEntity.Status = user.Status;
+            findEntity.UpdatedBy = user.UpdatedBy;
+            Update(findEntity);
+            var result = await _unitOfWork.Save(cancellationToken);
+
+            if (result > 0)
+            {
+                return new GenericResponse<dynamic>
+                {
+                    message = _systemMessages.Success,
+                    code = HttpStatusCode.OK,
+                    result = "User Active Successfully!"
                 };
             }
             else

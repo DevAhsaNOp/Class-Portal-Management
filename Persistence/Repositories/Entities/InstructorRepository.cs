@@ -44,10 +44,10 @@ namespace Persistence.Repositories.ClientRepositories
             _systemMessages = SystemMessages.Value;
         }
 
-        public async Task<List<InstructorResponse>> GetByStatuses(CancellationToken cancellationToken)
+        public async Task<List<InstructorResponseV2>> GetByStatuses(CancellationToken cancellationToken)
         {
             var list = await FilterIQueryable(x => true)
-                .Select(x => new InstructorResponse
+                .Select(x => new InstructorResponseV2
                 {
                     Id = x.Id,
                     FullName = x.FullName,
@@ -56,17 +56,12 @@ namespace Persistence.Repositories.ClientRepositories
                     Age = x.Age,
                     DateOfJoined = x.DateOfJoined,
                     Gender = x.Gender,
-                    Password = x.Password,
                     Qualification = x.Qualification,
                     Username = x.Username,
                     Status = x.Status,
                     CreatedAt = x.CreatedAt,
-                    CreatedBy = x.CreatedBy,
-                    UpdatedAt = x.UpdatedAt,
-                    UpdatedBy = x.UpdatedBy,
-                    DeletedAt = x.DeletedAt,
-                    DeletedBy = x.DeletedBy,
                 })
+                .OrderByDescending(x => x.CreatedAt)
                 .ToListAsync(cancellationToken);
 
             return list;
@@ -108,7 +103,8 @@ namespace Persistence.Repositories.ClientRepositories
                 return new GenericResponse<dynamic>
                 {
                     message = _systemMessages.Error,
-                    code = HttpStatusCode.BadRequest
+                    code = HttpStatusCode.BadRequest,
+                    result = "An error occurred! Please try again!"
                 };
             }
         }
@@ -139,7 +135,18 @@ namespace Persistence.Repositories.ClientRepositories
                 };
             }
 
+            request.Password = string.IsNullOrEmpty(request.Password) ? findEntity.Password : _helper.Encryptor(request.Password);
+
             _mapper.Map(request, findEntity);
+
+            if (request.Image is null && !string.IsNullOrEmpty(request.ProfileImage))
+            {
+                request.ProfileImage = string.IsNullOrEmpty(request.ProfileImage) ? string.Empty : request.ProfileImage.Split("Assets\\")[1];
+                findEntity.Image = request.ProfileImage;
+            }
+            else
+                findEntity.Image = _helper.AddInAttachmentStore(request.Image, adminDirectoryDetail);
+
             Update(findEntity);
             var result = await _unitOfWork.Save(cancellationToken);
 
@@ -157,7 +164,8 @@ namespace Persistence.Repositories.ClientRepositories
                 return new GenericResponse<dynamic>
                 {
                     message = _systemMessages.Error,
-                    code = HttpStatusCode.BadRequest
+                    code = HttpStatusCode.BadRequest,
+                    result = "An error occurred! Please try again!"
                 };
             }
         }
@@ -197,7 +205,8 @@ namespace Persistence.Repositories.ClientRepositories
                 return new GenericResponse<dynamic>
                 {
                     message = _systemMessages.Success,
-                    code = HttpStatusCode.OK
+                    code = HttpStatusCode.OK,
+                    result = "Instructor Details Deleted Successfully!"
                 };
             }
             else
@@ -205,7 +214,8 @@ namespace Persistence.Repositories.ClientRepositories
                 return new GenericResponse<dynamic>
                 {
                     message = _systemMessages.Error,
-                    code = HttpStatusCode.BadRequest
+                    code = HttpStatusCode.BadRequest,
+                    result = "An error occurred! Please try again!"
                 };
             }
         }
@@ -222,7 +232,7 @@ namespace Persistence.Repositories.ClientRepositories
                     Age = x.Age,
                     DateOfJoined = x.DateOfJoined,
                     Gender = x.Gender,
-                    Password = x.Password,
+                    Password = _helper.DecryptFromBase64String(x.Password),
                     Qualification = x.Qualification,
                     Username = x.Username,
                     Status = x.Status,

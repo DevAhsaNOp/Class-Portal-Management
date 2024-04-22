@@ -1,5 +1,5 @@
-﻿@using Application.ClientFeatures.Instructor.Response
-@model List<InstructorResponse>
+﻿@using Application.ClientFeatures.User.Response
+@model List<UserResponseV2>
 
 @{
     Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
@@ -9,23 +9,43 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <h3 class="my-4 font-weight-normal bg-info text-white p-2 rounded">Joined Instructors List</h3>
-            <button class="btn btn-success float-right">Add New Instructor</button>
+            <h3 class="my-4 font-weight-normal bg-info text-white p-2 rounded">New Enrolled Users List</h3>
         </div>
         <div class="col-md-12">
-            <h1>Instructors</h1>
+            <h1>Users Waiting For Approval</h1>
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible show fade">
+                    <div class="alert-body">
+                        <button class="close" data-dismiss="alert">
+                            <span>×</span>
+                        </button>
+                        @Html.Raw(TempData["Success"])
+                    </div>
+                </div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible show fade">
+                    <div class="alert-body">
+                        <button class="close" data-dismiss="alert">
+                            <span>×</span>
+                        </button>
+                        @Html.Raw(TempData["Error"])
+                    </div>
+                </div>
+            }
             <table class="table table-bordered">
                 <thead class="table-info">
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">InstructorId</th>
+                        <th scope="col">UserId</th>
                         <th scope="col">FullName</th>
                         <th scope="col">Username</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Gender</th>
-                        <th scope="col">Qualification</th>
+                        <th scope="col">Role</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Joined Date</th>
+                        <th scope="col">Enrolled Date</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -40,8 +60,7 @@
                                 <td>@user.FullName</td>
                                 <td>@user.Username</td>
                                 <td>@user.Email</td>
-                                <td>@user.Gender</td>
-                                <td>@user.Qualification</td>
+                                <td>@user.Role</td>
                                 @if (user.Status == 1)
                                 {
                                     <td><span class="badge badge-success" style="font-size: 12px !important">Active</span></td>
@@ -53,8 +72,7 @@
                                 }
                                 <td>@user.CreatedAt.Value.ToString("dd-MM-yyyy hh:mm tt")</td>
                                 <td>
-                                    <a href="@Url.Action("Edit", "Instructors", new { id = user.Id })" class="btn btn-primary">Edit</a>
-                                    <a href="@Url.Action("Delete", "Instructors", new { id = user.Id })" class="btn btn-danger">Delete</a>
+                                    <a href="@Url.Action("Detail", "User", new { id = user.Id })" class="btn btn-info">View</a>
                                 </td>
                             </tr>
                             count++;

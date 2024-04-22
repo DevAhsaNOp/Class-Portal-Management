@@ -32,7 +32,6 @@ public sealed class InstructorUpdateRequestValidator : AbstractValidator<Instruc
         RuleFor(x => x.Age).NotEmpty().NotEqual(0);
         RuleFor(x => x.DateOfJoined).NotEmpty();
         RuleFor(x => x.Qualification).NotNull().NotEmpty().MaximumLength(150);
-        RuleFor(x => x.Image).NotNull();
         RuleFor(x => x.Username).NotNull().NotEmpty().MaximumLength(50);
         RuleFor(x => x.Email).NotNull().NotEmpty().MaximumLength(50);
         RuleFor(x => x.Password).NotNull().NotEmpty().MaximumLength(50);

@@ -1,8 +1,8 @@
-﻿@using Application.ClientFeatures.User.Request
-@model UserUpdateRequest
+﻿@using Application.ClientFeatures.Instructor.Request
+@model InstructorUpdateRequest
 
 @{
-    ViewData["Title"] = "Edit User - KidKinder Admin";
+    ViewData["Title"] = "Edit Instructor - KidKinder Admin";
     Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
 }
 
@@ -51,21 +51,13 @@
             color: #000;
         }
 </style>
-<script>
-    function loadProfile(event) {
-        var files = event.target.files;
-        for (var i = 0; i < files.length; i++) {
-            $("#dynamicImage").attr("src", URL.createObjectURL(event.target.files[i]));
-        }
-    }
-</script>
 
 @* Add Page Navigation Here *@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">User</a></li>
-        <li class="breadcrumb-item"><a href="#">Edit User</a></li>
+        <li class="breadcrumb-item"><a href="#">Instructor</a></li>
+        <li class="breadcrumb-item"><a href="#">Edit Instructor</a></li>
     </ol>
 </nav>
 
@@ -75,11 +67,11 @@
             <div class="card">
                 <div class="card-header bg-info">
                     <h4 class="card-title text-white font-weight-bolder">
-                        Edit User
+                        Edit Instructor
                     </h4>
                 </div>
                 <div class="card-body">
-                    <form method="post" asp-action="EditUser" asp-controller="Admin" enctype="multipart/form-data">
+                    <form method="post" asp-action="Edit" asp-controller="Instructor" id="formInstructor" enctype="multipart/form-data">
                         @if (TempData["Success"] != null)
                         {
                             <div class="alert alert-success alert-dismissible show fade">
@@ -102,7 +94,7 @@
                                 </div>
                             </div>
                         }
-                        <input type="hidden" asp-for="Id" value="@Model.Id" />
+                        <input type="hidden" asp-for="Id" style="display: none !important; visibility: hidden !important;" />
                         <div class="row">
                             <div class="col-md-12">
                                 <div style="display: flex; justify-content: center;">
@@ -126,14 +118,46 @@
                                 <div class="form-group">
                                     <label for="fullname">Enter Fullname</label>
                                     <span asp-validation-for="FullName" class="text-danger"></span>
-                                    <input type="text" asp-for="FullName" class="form-control" value="@Model.FullName" placeholder="Enter Full Name">
+                                    <input type="text" asp-for="FullName" value="@Model.FullName" class="form-control" placeholder="Enter Full Name">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Enter Username</label>
                                     <span asp-validation-for="Username" class="text-danger"></span>
-                                    <input type="text" asp-for="Username" class="form-control" value="@Model.Username" placeholder="Enter Username">
+                                    <input type="text" asp-for="Username" value="@Model.Username" class="form-control" placeholder="Enter Username">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fullname">Enter Gender</label>
+                                    <span asp-validation-for="Gender" class="text-danger"></span>
+                                    <input type="text" asp-for="Gender" value="@Model.Gender" class="form-control" placeholder="Enter Gender">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Enter Qualification</label>
+                                    <span asp-validation-for="Qualification" class="text-danger"></span>
+                                    <input type="text" asp-for="Qualification" value="@Model.Qualification" class="form-control" placeholder="Enter Qualification">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fullname">Enter Age</label>
+                                    <span asp-validation-for="Age" class="text-danger"></span>
+                                    <input type="number" asp-for="Age" value="@Model.Age" class="form-control" placeholder="Enter Age">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Enter Date Of Joining</label>
+                                    <span asp-validation-for="DateOfJoined" class="text-danger"></span>
+                                    <input type="date" asp-for="DateOfJoined" value="@Model.DateOfJoined.ToString("yyyy-MM-dd")" class="form-control" placeholder="Enter Date Of Joining">
                                 </div>
                             </div>
                         </div>
@@ -142,7 +166,7 @@
                                 <div class="form-group">
                                     <label>Enter Email</label>
                                     <span asp-validation-for="Email" class="text-danger"></span>
-                                    <input type="text" class="form-control" asp-for="Email" value="@Model.Email" readonly="readonly" placeholder="abc@exmaple.com" />
+                                    <input type="text" readonly="readonly" class="form-control" asp-for="Email" value="@Model.Email"/>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -165,7 +189,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Edit User</button>
+                                    <button type="submit" class="btn btn-success">Edit Instructor</button>
                                 </div>
                             </div>
                         </div>
@@ -176,7 +200,6 @@
     </div>
 </div>
 <script>
-
     $('#choose-file').change(function () {
         var file = $('#choose-file')[0].files[0].name;
         $('#choose-file-label').text(file);
@@ -192,5 +215,5 @@
             });
             return false;
         }
-    });
+    }); 
 </script>

@@ -1,0 +1,115 @@
+﻿@using Application.ClientFeatures.User.Response
+@model List<UserResponseV2>
+
+@{
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="my-4 font-weight-normal bg-info text-white p-2 rounded">Enrolled Users List</h3>
+            <a href="@Url.Action("Add","User")" class="btn btn-success float-right">Add New User</a>
+        </div>
+        <div class="col-md-12">
+            <h1>Users</h1>
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible show fade">
+                    <div class="alert-body">
+                        <button class="close" data-dismiss="alert">
+                            <span>×</span>
+                        </button>
+                        @Html.Raw(TempData["Success"])
+                    </div>
+                </div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible show fade">
+                    <div class="alert-body">
+                        <button class="close" data-dismiss="alert">
+                            <span>×</span>
+                        </button>
+                        @Html.Raw(TempData["Error"])
+                    </div>
+                </div>
+            }
+            <table class="table table-bordered">
+                <thead class="table-info">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">UserId</th>
+                        <th scope="col">FullName</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Enrolled Date</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var count = 1;
+                        foreach (var user in Model)
+                        {
+                            <tr>
+                                <td scope="row">@count</td>
+                                <td>@user.Id</td>
+                                <td>@user.FullName</td>
+                                <td>@user.Username</td>
+                                <td>@user.Email</td>
+                                <td>@user.Role</td>
+                                @if (user.Status == 1)
+                                {
+                                    <td><span class="badge badge-success" style="font-size: 12px !important">Active</span></td>
+                                }
+                                else if (user.Status == 3)
+                                {
+                                    <td><span class="badge badge-danger" style="font-size: 12px !important">Deleted</span></td>
+                                }
+                                else
+                                {
+                                    <td><span class="badge badge-danger" style="font-size: 12px !important">Inactive</span></td>
+                                }
+                                <td>@user.CreatedAt.Value.ToString("dd-MM-yyyy hh:mm tt")</td>
+                                @if (user.Status != 3)
+                                {
+                                    <td>
+                                        <a href="@Url.Action("Edit", "User", new { id = user.Id })" class="btn btn-primary">Edit</a>
+                                        <a href="@Url.Action("Delete", "User", new { id = user.Id })" id="deleteUser" class="btn btn-danger">Delete</a>
+                                    </td>
+                                }
+                            </tr>
+                            count++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    // Show Sweet Alert When Click On Delete to Confirm
+
+    $(document).ready(function () {
+        $('#deleteUser').click(function (e) {
+            e.preventDefault();
+            var url = $(this).attr('href');
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this user!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Saved!", "", "success");
+                    window.location.href = url;
+                }
+            });
+        });
+    });
+</script>

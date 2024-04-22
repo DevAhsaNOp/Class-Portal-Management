@@ -150,3 +150,10 @@ public sealed record UserDeleteRequest
     public int? DeletedBy { get; set; }
     public int Status { get; set; }
 }
+
+public sealed record UserStatusChangeRequest
+{
+    public int Id { get; set; }
+    public int? UpdatedBy { get; set; }
+    public int Status { get; set; }
+}

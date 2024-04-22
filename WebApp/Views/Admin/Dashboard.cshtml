@@ -70,6 +70,12 @@
                                     <span class="badge badge-success" style="font-size: 12px">Active</span>
                                 </td>
                             }
+                            else if(user.Status == 3)
+                            {
+                                <td>
+                                    <span class="badge badge-danger" style="font-size: 12px">Deleted</span>
+                                </td>
+                            }
                             else
                             {
                                 <td>
@@ -83,9 +89,9 @@
                 }
                 <tr>
                     <th class="text-center" colspan="7">
-                        <button class="btn btn-info">
+                        <a href="@Url.Action("NonActiveUsers","User")" class="btn btn-info">
                             View All
-                        </button>
+                        </a>
                     </th>
                 </tr>
             </tbody>
@@ -126,6 +132,12 @@
                                     <span class="badge badge-success" style="font-size: 12px">Active</span>
                                 </td>
                             }
+                            else if (user.Status == 3)
+                            {
+                                <td>
+                                    <span class="badge badge-danger" style="font-size: 12px">Deleted</span>
+                                </td>
+                            }
                             else
                             {
                                 <td>
@@ -139,9 +151,9 @@
                 }
                 <tr>
                     <th class="text-center" colspan="7">
-                        <button class="btn btn-info">
+                        <a href="@Url.Action("Users","User")" class="btn btn-info">
                             View All
-                        </button>
+                        </a>
                     </th>
                 </tr>
             </tbody>
@@ -186,6 +198,12 @@
                                     <span class="badge badge-success" style="font-size: 12px">Active</span>
                                 </td>
                             }
+                            else if (user.Status == 3)
+                            {
+                                <td>
+                                    <span class="badge badge-danger" style="font-size: 12px">Deleted</span>
+                                </td>
+                            }
                             else
                             {
                                 <td>
@@ -199,9 +217,9 @@
                 }
                 <tr>
                     <th class="text-center" colspan="9">
-                        <button class="btn btn-info">
+                        <a href="@Url.Action("Instructors","Instructor")" class="btn btn-info">
                             View All
-                        </button>
+                        </a>
                     </th>
                 </tr>
             </tbody>

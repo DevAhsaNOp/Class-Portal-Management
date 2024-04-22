@@ -20,10 +20,12 @@ public sealed record UserResponse
 
 public sealed record UserResponseV2
 {
+    public int Id { get; set; }
     public string FullName { get; set; }
     public string Image { get; set; }
     public string Username { get; set; }
     public string Email { get; set; }
+    public string Role { get; set; }
     public int Status { get; set; }
     public DateTime? CreatedAt { get; set; }
 }

@@ -1,8 +1,8 @@
 ﻿@using Application.ClientFeatures.User.Request
-@model UserCreateRequest
+@model UserUpdateRequest
 
 @{
-    ViewData["Title"] = "Add User - KidKinder Admin";
+    ViewData["Title"] = "Edit User - KidKinder Admin";
     Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
 }
 
@@ -51,13 +51,21 @@
             color: #000;
         }
 </style>
+<script>
+    function loadProfile(event) {
+        var files = event.target.files;
+        for (var i = 0; i < files.length; i++) {
+            $("#dynamicImage").attr("src", URL.createObjectURL(event.target.files[i]));
+        }
+    }
+</script>
 
 @* Add Page Navigation Here *@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#">User</a></li>
-        <li class="breadcrumb-item"><a href="#">Add User</a></li>
+        <li class="breadcrumb-item"><a href="#">Edit User</a></li>
     </ol>
 </nav>
 
@@ -67,11 +75,11 @@
             <div class="card">
                 <div class="card-header bg-info">
                     <h4 class="card-title text-white font-weight-bolder">
-                        Add User
+                        Edit User
                     </h4>
                 </div>
                 <div class="card-body">
-                    <form method="post" asp-action="AddUser" asp-controller="Admin" enctype="multipart/form-data">
+                    <form method="post" asp-action="Edit" asp-controller="User" enctype="multipart/form-data">
                         @if (TempData["Success"] != null)
                         {
                             <div class="alert alert-success alert-dismissible show fade">
@@ -94,13 +102,21 @@
                                 </div>
                             </div>
                         }
+                        <input type="hidden" asp-for="Id" value="@Model.Id" />
                         <div class="row">
-                            <div class="col-md-12 d-flex justify-content-center">
-                                <div class="form-group text-center">
-                                    <div class="image-preview" id="imagePreview">
-                                        <input asp-for="Image" type="file" id="image" name="image" accept="image/*" required>
-                                        <span asp-validation-for="Image" class="text-danger"></span>
-                                        <label for="image" class="image-label">Choose Image</label>
+                            <div class="col-md-12">
+                                <div style="display: flex; justify-content: center;">
+                                    <div id="image-preview" class="image-preview">
+                                        <label for="choose-file" class="custom-file-upload" id="choose-file-label">
+                                            Change Avatar
+                                        </label>
+                                        <input asp-for="Image" name="Image" type="file" id="choose-file"
+                                               accept="image/png,image/jpg,image/jpeg" onchange="loadProfile(event)" style="display: none !important;" />
+                                        @if (Model.ProfileImage != null)
+                                        {
+                                            <img id="dynamicImage" src="@Model.ProfileImage" alt="Profile Image" width="150" height="150" style="border-radius: 50%;" />
+                                            <input type="hidden" asp-for="ProfileImage" value="@Model.ProfileImage" />
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -110,14 +126,14 @@
                                 <div class="form-group">
                                     <label for="fullname">Enter Fullname</label>
                                     <span asp-validation-for="FullName" class="text-danger"></span>
-                                    <input type="text" asp-for="FullName" class="form-control" placeholder="Enter Full Name">
+                                    <input type="text" asp-for="FullName" class="form-control" value="@Model.FullName" placeholder="Enter Full Name">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Enter Username</label>
                                     <span asp-validation-for="Username" class="text-danger"></span>
-                                    <input type="text" asp-for="Username" class="form-control" placeholder="Enter Username">
+                                    <input type="text" asp-for="Username" class="form-control" value="@Model.Username" placeholder="Enter Username">
                                 </div>
                             </div>
                         </div>
@@ -126,14 +142,14 @@
                                 <div class="form-group">
                                     <label>Enter Email</label>
                                     <span asp-validation-for="Email" class="text-danger"></span>
-                                    <input type="text" class="form-control" asp-for="Email" placeholder="abc@exmaple.com" />
+                                    <input type="text" class="form-control" asp-for="Email" value="@Model.Email" readonly="readonly" placeholder="abc@exmaple.com" />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Password</label>
                                     <span asp-validation-for="Password" class="text-danger"></span>
-                                    <input type="password" asp-for="Password" class="form-control" placeholder="Enter Password">
+                                    <input type="password" asp-for="Password" class="form-control" value="@Model.Password" placeholder="Enter Password">
                                 </div>
                             </div>
                         </div>
@@ -142,14 +158,14 @@
                                 <div class="form-group">
                                     <label>Confirm Password</label>
                                     <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                                    <input type="password" asp-for="ConfirmPassword" class="form-control" placeholder="Enter Confirm Password">
+                                    <input type="password" asp-for="ConfirmPassword" class="form-control" value="@Model.ConfirmPassword" placeholder="Enter Confirm Password">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Add User</button>
+                                    <button type="submit" class="btn btn-primary">Edit User</button>
                                 </div>
                             </div>
                         </div>
@@ -160,23 +176,21 @@
     </div>
 </div>
 <script>
-    const imagePreview = document.getElementById('imagePreview');
-    const imageLabel = document.querySelector('.image-label');
-    const imageInput = document.getElementById('image');
 
-    imageInput.addEventListener('change', function () {
-        const file = this.files[0];
+    $('#choose-file').change(function () {
+        var file = $('#choose-file')[0].files[0].name;
+        $('#choose-file-label').text(file);
+    });
 
-        if (file) {
-            const reader = new FileReader();
-
-            imageLabel.textContent = file.name;
-
-            reader.onload = function () {
-                imagePreview.style.backgroundImage = `url('${this.result}')`;
-            }
-
-            reader.readAsDataURL(file);
+    // Check If dynamicImage contains image or not on form submit
+    $('#formAcoount').submit(function () {
+        if ($('#dynamicImage').attr('src') == '') {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Please select an image',
+                icon: 'error',
+            });
+            return false;
         }
     });
 </script>

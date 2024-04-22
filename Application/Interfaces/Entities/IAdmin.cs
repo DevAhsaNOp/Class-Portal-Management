@@ -13,7 +13,6 @@ namespace Application.Interfaces.ClientInterfaces
         Task<GenericResponse<dynamic>> Update(AdminUpdateRequest request, CancellationToken cancellationToken = default);
         Task<GenericResponse<dynamic>> Delete(AdminDeleteRequest request, CancellationToken cancellationToken = default);
         Task<List<AdminResponse>> GetByStatuses(CancellationToken cancellationToken = default);
-        Task<UserAndInstructorDetails> GetNewUsersAndInstructors(CancellationToken cancellationToken = default);
         Task<AdminResponse> GetById(long Id, CancellationToken cancellationToken = default);
         Task<bool> IsEmailExist(string email, CancellationToken cancellationToken = default);
         Task<GenericResponse<dynamic>> CheckLogin(UserLoginRequest request, CancellationToken cancellationToken = default);

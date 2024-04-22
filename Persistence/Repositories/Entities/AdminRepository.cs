@@ -1,9 +1,7 @@
 ﻿using Application.ClientFeatures.Admin.Request;
 using Application.ClientFeatures.Admin.Response;
 using Application.ClientFeatures.Admin.Validator;
-using Application.ClientFeatures.Instructor.Response;
 using Application.ClientFeatures.User.Request;
-using Application.ClientFeatures.User.Response;
 using Application.ClientFeatures.User.Validator;
 using Application.Common.Behaviors;
 using Application.Features.GenericFeatures;
@@ -294,60 +292,6 @@ namespace Persistence.Repositories.ClientRepositories
                 message = _systemMessages.Success,
                 code = HttpStatusCode.OK,
                 result = user
-            };
-        }
-
-        public async Task<UserAndInstructorDetails> GetNewUsersAndInstructors(CancellationToken cancellationToken = default)
-        {
-            var usersList = await _dataContext.tblUser
-                .Where(x => x.Status == 1)
-                .Select(x => new UserResponseV2
-                {
-                    FullName = x.FullName,
-                    Email = x.Email,
-                    Image = string.IsNullOrEmpty(x.Image) ? string.Empty : string.Concat(AppSetting.DocumentUrl, "\\Assets\\", x.Image),
-                    Username = x.Username,
-                    Status = x.Status,
-                    CreatedAt = x.CreatedAt,
-                })
-                .OrderByDescending(x => x.CreatedAt)
-                .ToListAsync(cancellationToken);
-
-            var instructorsList = await _dataContext.tblInstructor
-                .Where(x => x.Status == 1)
-                .Select(x => new InstructorResponseV2
-                {
-                    FullName = x.FullName,
-                    Email = x.Email,
-                    Image = string.IsNullOrEmpty(x.Image) ? string.Empty : string.Concat(AppSetting.DocumentUrl, "\\Assets\\", x.Image),
-                    Username = x.Username,
-                    Status = x.Status,
-                    CreatedAt = x.CreatedAt,
-                    Gender = x.Gender,
-                    Qualification = x.Qualification,
-                })
-                .OrderByDescending(x => x.CreatedAt)
-                .ToListAsync(cancellationToken);
-
-            var nonActiveUsersList = await _dataContext.tblUser
-                .Where(x => x.Status == 2)
-                .Select(x => new UserResponseV2
-                {
-                    FullName = x.FullName,
-                    Email = x.Email,
-                    Image = string.IsNullOrEmpty(x.Image) ? string.Empty : string.Concat(AppSetting.DocumentUrl, "\\Assets\\", x.Image),
-                    Username = x.Username,
-                    Status = x.Status,
-                    CreatedAt = x.CreatedAt,
-                })
-                .OrderByDescending(x => x.CreatedAt)
-                .ToListAsync(cancellationToken);
-
-            return new UserAndInstructorDetails
-            {
-                Users = usersList,
-                NonActiveUsers = nonActiveUsersList,
-                Instructors = instructorsList
             };
         }
     }
