@@ -23,6 +23,10 @@
             vertical-align: baseline !important;
             text-align: center !important;
         }
+
+        a[data-toggle="collapse"] {
+            color: #ffecc9 !important;
+        }
     </style>
 </head>
 <body>
@@ -33,15 +37,15 @@
                    class="img logo rounded-circle mb-5"
                    style="background-image: url(../assests/images/logo.jpg)"></a>
                 <ul class="list-unstyled components mb-5">
-                    <li>
+                    <li class="active">
                         <a href="@Url.Action("Dashboard", "Admin")">Home</a>
                     </li>
                     <li>
                         <a href="#homeSubmenu"
                            data-toggle="collapse"
-                           aria-expanded="false"
+                           aria-expanded="true"
                            class="dropdown-toggle">Users</a>
-                        <ul class="collapse list-unstyled" id="homeSubmenu">
+                        <ul class="collapse list-unstyled show" id="homeSubmenu">
                             <li>
                                 <a href="@Url.Action("Users", "User")">List of Users</a>
                             </li>
@@ -56,9 +60,9 @@
                     <li>
                         <a href="#pageSubmenu"
                            data-toggle="collapse"
-                           aria-expanded="false"
+                           aria-expanded="true"
                            class="dropdown-toggle">Instructors</a>
-                        <ul class="collapse list-unstyled" id="pageSubmenu">
+                        <ul class="collapse list-unstyled show" id="pageSubmenu">
                             <li>
                                 <a href="@Url.Action("Instructors", "Instructor")">List of Instructors</a>
                             </li>
@@ -70,9 +74,9 @@
                     <li>
                         <a href="#insSubmenu"
                            data-toggle="collapse"
-                           aria-expanded="false"
+                           aria-expanded="true"
                            class="dropdown-toggle">Classes</a>
-                        <ul class="collapse list-unstyled" id="insSubmenu">
+                        <ul class="collapse list-unstyled show" id="insSubmenu">
                             <li>
                                 <a href="@Url.Action("Classes", "Class")">List of Classes</a>
                             </li>
