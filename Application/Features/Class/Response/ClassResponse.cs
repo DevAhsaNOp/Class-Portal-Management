@@ -23,3 +23,18 @@ public sealed record ClassResponse
     public int? DeletedBy { get; set; }
 }
 
+public sealed record ClassResponseV2
+{
+    public int Id { get; set; }
+    public string Image { get; set; }
+    public string ClassName { get; set; }
+    public int GradeLevel { get; set; }
+    public string Description { get; set; }
+    public string AgeGroups { get; set; }
+    public decimal Fees { get; set; }
+    public DateTime StartTiming { get; set; }
+    public DateTime EndTiming { get; set; }
+    public int MaxClassSize { get; set; }
+    public int Status { get; set; }
+}
+

@@ -140,6 +140,15 @@ namespace Persistence.Repositories.ClientRepositories
             }
 
             _mapper.Map(request, findEntity);
+
+            if (request.Image is null && !string.IsNullOrEmpty(request.ProfileImage))
+            {
+                request.ProfileImage = string.IsNullOrEmpty(request.ProfileImage) ? string.Empty : request.ProfileImage.Split("Assets\\")[1];
+                findEntity.Image = request.ProfileImage;
+            }
+            else
+                findEntity.Image = _helper.AddInAttachmentStore(request.Image, adminDirectoryDetail);
+
             Update(findEntity);
             var result = await _unitOfWork.Save(cancellationToken);
 
@@ -157,7 +166,8 @@ namespace Persistence.Repositories.ClientRepositories
                 return new GenericResponse<dynamic>
                 {
                     message = _systemMessages.Error,
-                    code = HttpStatusCode.BadRequest
+                    code = HttpStatusCode.BadRequest,
+                    result = "An error occurred while updating the class details. Please try again!"
                 };
             }
         }

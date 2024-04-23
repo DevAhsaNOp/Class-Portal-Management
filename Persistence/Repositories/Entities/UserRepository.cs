@@ -233,6 +233,7 @@ namespace Persistence.Repositories.ClientRepositories
                     Username = x.Username,
                     Password = _helper.DecryptFromBase64String(x.Password),
                     Status = x.Status,
+                    Role = "User",
                     CreatedAt = x.CreatedAt,
                     CreatedBy = x.CreatedBy,
                     UpdatedAt = x.UpdatedAt,

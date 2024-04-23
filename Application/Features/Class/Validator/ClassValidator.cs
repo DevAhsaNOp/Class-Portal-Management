@@ -30,7 +30,6 @@ public sealed class ClassUpdateRequestValidator : AbstractValidator<ClassUpdateR
         RuleFor(x => x.Id).NotEmpty().NotEqual(0);
         RuleFor(x => x.ClassName).NotNull().NotEmpty().MaximumLength(100);
         RuleFor(x => x.GradeLevel).NotNull().NotEmpty().NotEqual(0);
-        RuleFor(x => x.Image).NotNull().NotEmpty();
         RuleFor(x => x.Description).NotNull().NotEmpty();
         RuleFor(x => x.AgeGroups).NotNull().NotEmpty().MaximumLength(150);
         RuleFor(x => x.Fees).NotNull().NotEmpty().NotEqual(0);

@@ -1,8 +1,8 @@
-﻿@using Application.ClientFeatures.User.Request
-@model UserUpdateRequest
+﻿@using Application.ClientFeatures.Class.Request
+@model ClassUpdateRequest
 
 @{
-    ViewData["Title"] = "Edit User - KidKinder Admin";
+    ViewData["Title"] = "Edit Class - KidKinder Admin";
     Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
 }
 
@@ -51,21 +51,13 @@
             color: #000;
         }
 </style>
-<script>
-    function loadProfile(event) {
-        var files = event.target.files;
-        for (var i = 0; i < files.length; i++) {
-            $("#dynamicImage").attr("src", URL.createObjectURL(event.target.files[i]));
-        }
-    }
-</script>
 
 @* Add Page Navigation Here *@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">User</a></li>
-        <li class="breadcrumb-item"><a href="#">Edit User</a></li>
+        <li class="breadcrumb-item"><a href="#">Class</a></li>
+        <li class="breadcrumb-item"><a href="#">Edit Class</a></li>
     </ol>
 </nav>
 
@@ -75,11 +67,11 @@
             <div class="card">
                 <div class="card-header bg-info">
                     <h4 class="card-title text-white font-weight-bolder">
-                        Edit User
+                        Edit Class
                     </h4>
                 </div>
                 <div class="card-body">
-                    <form method="post" asp-action="Edit" asp-controller="User" id="formUser" enctype="multipart/form-data">
+                    <form method="post" asp-action="Edit" asp-controller="Class" id="formClass" enctype="multipart/form-data">
                         @if (TempData["Success"] != null)
                         {
                             <div class="alert alert-success alert-dismissible show fade">
@@ -102,7 +94,7 @@
                                 </div>
                             </div>
                         }
-                        <input type="hidden" asp-for="Id" value="@Model.Id" />
+                        <input type="hidden" asp-for="Id" style="display: none !important; visibility: hidden !important;" />
                         <div class="row">
                             <div class="col-md-12">
                                 <div style="display: flex; justify-content: center;">
@@ -124,48 +116,96 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="fullname">Enter Fullname</label>
-                                    <span asp-validation-for="FullName" class="text-danger"></span>
-                                    <input type="text" asp-for="FullName" class="form-control" value="@Model.FullName" placeholder="Enter Full Name">
+                                    <label for="fullname">Enter Class Name</label>
+                                    <span asp-validation-for="ClassName" class="text-danger"></span>
+                                    <input type="text" asp-for="ClassName" value="@Model.ClassName" class="form-control" placeholder="Enter Class Name">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Enter Username</label>
-                                    <span asp-validation-for="Username" class="text-danger"></span>
-                                    <input type="text" asp-for="Username" class="form-control" value="@Model.Username" placeholder="Enter Username">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Enter Email</label>
-                                    <span asp-validation-for="Email" class="text-danger"></span>
-                                    <input type="text" class="form-control" asp-for="Email" value="@Model.Email" readonly="readonly" placeholder="abc@exmaple.com" />
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Password</label>
-                                    <span asp-validation-for="Password" class="text-danger"></span>
-                                    <input type="password" asp-for="Password" class="form-control" value="@Model.Password" placeholder="Enter Password">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Confirm Password</label>
-                                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                                    <input type="password" asp-for="ConfirmPassword" class="form-control" value="@Model.ConfirmPassword" placeholder="Enter Confirm Password">
+                                    <label>Enter Grade Level</label>
+                                    <span asp-validation-for="GradeLevel" class="text-danger"></span>
+                                    <input type="text" asp-for="GradeLevel" value="@Model.GradeLevel" class="form-control" placeholder="Enter Grade Level">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Edit User</button>
+                                    <label for="fullname">Enter Description</label>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                    <textarea asp-for="Description" rows="6" class="form-control" placeholder="Enter Description">
+                                        @Model.Description
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fullname">Enter Age Groups</label>
+                                    <span asp-validation-for="AgeGroups" class="text-danger"></span>
+                                    <input type="text" asp-for="AgeGroups" class="form-control" value="@Model.AgeGroups" placeholder="Enter AgeGroups">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Enter Fees</label>
+                                    <span asp-validation-for="Fees" class="text-danger"></span>
+                                    <input type="number" asp-for="Fees" class="form-control" value="@Model.Fees" placeholder="Enter Fees">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Enter StartTiming</label>
+                                    <span asp-validation-for="StartTiming" class="text-danger"></span>
+                                    <input type="time" class="form-control" asp-for="StartTiming" value="@Model.StartTiming.ToString("HH:mm")" placeholder="Enter Start Timing" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Enter EndTiming</label>
+                                    <span asp-validation-for="EndTiming" class="text-danger"></span>
+                                    <input type="time" class="form-control" asp-for="EndTiming" value="@Model.EndTiming.ToString("HH:mm")" placeholder="Enter End Timing" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Enter Max Class Size</label>
+                                    <span asp-validation-for="MaxClassSize" class="text-danger"></span>
+                                    <input type="number" asp-for="MaxClassSize" class="form-control" value="@Model.MaxClassSize" placeholder="Enter Max Class Size">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Select Instructor</label>
+                                    <span asp-validation-for="InstructorID" class="text-danger"></span>
+                                    <select asp-for="InstructorID" class="form-control">
+                                        <option disabled value="0">Select Instructor</option>
+                                        @foreach (var instructor in ViewBag.Instructors)
+                                        {
+                                            if(instructor.Id == Model.InstructorID)
+                                            {
+                                                <option value="@instructor.Id" selected>@instructor.FullName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@instructor.Id">@instructor.FullName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-success">Edit Class</button>
+                                    <a href="@Url.Action("Classes", "Class")" type="submit" class="btn btn-danger">Cancel</a>
                                 </div>
                             </div>
                         </div>
@@ -176,14 +216,13 @@
     </div>
 </div>
 <script>
-
     $('#choose-file').change(function () {
         var file = $('#choose-file')[0].files[0].name;
         $('#choose-file-label').text(file);
     });
 
     // Check If dynamicImage contains image or not on form submit
-    $('#formUser').submit(function () {
+    $('#formClass').submit(function () {
         if ($('#dynamicImage').attr('src') == '') {
             Swal.fire({
                 title: 'Error!',

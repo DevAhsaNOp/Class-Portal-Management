@@ -1,4 +1,5 @@
-﻿using Application.ClientFeatures.Instructor.Request;
+﻿using Application.ClientFeatures.Class.Response;
+using Application.ClientFeatures.Instructor.Request;
 using Application.ClientFeatures.Instructor.Response;
 using Application.ClientFeatures.Instructor.Validator;
 using Application.ClientFeatures.User.Request;
@@ -234,8 +235,24 @@ namespace Persistence.Repositories.ClientRepositories
                     Gender = x.Gender,
                     Password = _helper.DecryptFromBase64String(x.Password),
                     Qualification = x.Qualification,
+                    Role = "Instructor",
                     Username = x.Username,
                     Status = x.Status,
+                    Classes = x.Classes
+                    .Select(c => new ClassResponseV2
+                    {
+                        Id = c.Id,
+                        ClassName = c.ClassName,
+                        Description = c.Description,
+                        AgeGroups = c.AgeGroups,
+                        StartTiming = c.StartTiming,
+                        EndTiming = c.EndTiming,
+                        Fees = c.Fees,
+                        GradeLevel = c.GradeLevel,
+                        Image = string.IsNullOrEmpty(c.Image) ? string.Empty : string.Concat(AppSetting.DocumentUrl, "\\Assets\\", c.Image),
+                        MaxClassSize = c.MaxClassSize,
+                        Status = c.Status,
+                    }).ToList(),
                     CreatedAt = x.CreatedAt,
                     CreatedBy = x.CreatedBy,
                     UpdatedAt = x.UpdatedAt,
@@ -314,6 +331,20 @@ namespace Persistence.Repositories.ClientRepositories
                 code = HttpStatusCode.OK,
                 result = user
             };
+        }
+
+        public async Task<List<InstructorInfo>> GetAllActive(CancellationToken cancellationToken = default)
+        {
+            var instructors = await FilterIQueryable(x => x.Status == 1)
+                .OrderByDescending(i => i.CreatedAt)
+                .Select(x => new InstructorInfo
+                {
+                    Id = x.Id,
+                    FullName = x.FullName
+                })
+                .ToListAsync(cancellationToken);
+
+            return instructors;
         }
     }
 }

@@ -13,6 +13,7 @@ namespace Application.Interfaces.ClientInterfaces
         Task<GenericResponse<dynamic>> Update(InstructorUpdateRequest request, CancellationToken cancellationToken = default);
         Task<GenericResponse<dynamic>> Delete(InstructorDeleteRequest request, CancellationToken cancellationToken = default);
         Task<List<InstructorResponseV2>> GetByStatuses(CancellationToken cancellationToken = default);
+        Task<List<InstructorInfo>> GetAllActive(CancellationToken cancellationToken = default);
         Task<InstructorResponse> GetById(long Id, CancellationToken cancellationToken = default);
         Task<bool> IsEmailExits(string email, CancellationToken cancellationToken = default);
         Task<GenericResponse<dynamic>> CheckLogin(UserLoginRequest request, CancellationToken cancellationToken = default);

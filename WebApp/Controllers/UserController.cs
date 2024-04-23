@@ -127,6 +127,18 @@ namespace WebApp.Controllers
             return View(_response);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> UserDetail(int Id)
+        {
+            var _response = await _user.GetById(Id);
+            if (_response == null)
+            {
+                TempData["Error"] = "User not found";
+                return RedirectToAction("Users");
+            }
+            return View(_response);
+        }
+
         [HttpPost]
         public async Task<IActionResult> ChangeTheUserToActive(UserResponseV2 user)
         {

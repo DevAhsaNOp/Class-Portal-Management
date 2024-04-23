@@ -116,5 +116,20 @@ namespace WebApp.Controllers
                 return RedirectToAction("Instructors");
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Detail(int id)
+        {
+            var response = await _instructor.GetById(id);
+            if (response == null)
+            {
+                TempData["Error"] = "Instructor not found";
+                return RedirectToAction("Instructors");
+            }
+            else
+            {
+                return View(response);
+            }
+        }
     }
 }

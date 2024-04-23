@@ -190,6 +190,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-success">Edit Instructor</button>
+                                    <a href="@Url.Action("Instructors", "Instructor")" class="btn btn-danger">Cancel</a>
                                 </div>
                             </div>
                         </div>
@@ -206,7 +207,7 @@
     });
 
     // Check If dynamicImage contains image or not on form submit
-    $('#formAcoount').submit(function () {
+    $('#formInstructor').submit(function () {
         if ($('#dynamicImage').attr('src') == '') {
             Swal.fire({
                 title: 'Error!',

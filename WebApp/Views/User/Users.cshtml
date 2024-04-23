@@ -78,6 +78,7 @@
                                 @if (user.Status != 3)
                                 {
                                     <td>
+                                        <a href="@Url.Action("UserDetail", "User", new { id = user.Id })" class="btn btn-info">View</a>
                                         <a href="@Url.Action("Edit", "User", new { id = user.Id })" class="btn btn-primary">Edit</a>
                                         <a href="@Url.Action("Delete", "User", new { id = user.Id })" id="deleteUser" class="btn btn-danger">Delete</a>
                                     </td>

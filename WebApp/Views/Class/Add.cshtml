@@ -1,0 +1,242 @@
+﻿@using Application.ClientFeatures.Class.Request
+@model ClassCreateRequest
+
+@{
+    ViewData["Title"] = "Add Class - KidKinder Admin";
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+<style>
+    body {
+        background: #f8f8f8 !important;
+    }
+
+    .image-preview, #callback-preview {
+        width: 150px;
+        height: 150px;
+        background-size: cover;
+        border: 2px solid #ddd;
+        border-radius: 50%;
+        position: relative;
+        overflow: hidden;
+        background-color: #eee;
+        color: #ecf0f1;
+    }
+
+        .image-preview input, #callback-preview input {
+            line-height: 200px;
+            font-size: 200px;
+            position: absolute;
+            opacity: 0;
+            z-index: 10;
+        }
+
+        .image-preview label, #callback-preview label {
+            position: absolute;
+            z-index: 5;
+            opacity: 0.8;
+            cursor: pointer;
+            background-color: #fff;
+            width: 150px;
+            height: 50px;
+            font-size: 12px;
+            line-height: 50px;
+            text-transform: uppercase;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            text-align: center;
+            color: #000;
+        }
+</style>
+
+@* Add Page Navigation Here *@
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Class</a></li>
+        <li class="breadcrumb-item"><a href="#">Add Class</a></li>
+    </ol>
+</nav>
+
+<div class="container-fluid my-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-sm-12 col-md-8 col-lg-8 ">
+            <div class="card">
+                <div class="card-header bg-info">
+                    <h4 class="card-title text-white font-weight-bolder">
+                        Add Class
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-action="Add" asp-controller="Class" id="formClass" enctype="multipart/form-data">
+                        @if (TempData["Success"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible show fade">
+                                <div class="alert-body">
+                                    <button class="close" data-dismiss="alert">
+                                        <span>×</span>
+                                    </button>
+                                    @Html.Raw(TempData["Success"])
+                                </div>
+                            </div>
+                        }
+                        @if (TempData["Error"] != null)
+                        {
+                            <div class="alert alert-danger alert-dismissible show fade">
+                                <div class="alert-body">
+                                    <button class="close" data-dismiss="alert">
+                                        <span>×</span>
+                                    </button>
+                                    @Html.Raw(TempData["Error"])
+                                </div>
+                            </div>
+                        }
+                        <div class="row">
+                            <div class="col-md-12 d-flex justify-content-center">
+                                <div class="form-group text-center">
+                                    <div class="image-preview" id="imagePreview">
+                                        <input asp-for="Image" type="file" id="image" name="image" accept="image/*" required>
+                                        <span asp-validation-for="Image" class="text-danger"></span>
+                                        <label for="image" class="image-label">Choose Thumbnail</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fullname">Enter Class Name</label>
+                                    <span asp-validation-for="ClassName" class="text-danger"></span>
+                                    <input type="text" asp-for="ClassName" class="form-control" placeholder="Enter Class Name">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Enter Grade Level</label>
+                                    <span asp-validation-for="GradeLevel" class="text-danger"></span>
+                                    <input type="text" asp-for="GradeLevel" class="form-control" placeholder="Enter Grade Level">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="fullname">Enter Description</label>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                    <textarea asp-for="Description" rows="6" class="form-control" placeholder="Enter Description"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fullname">Enter Age Groups</label>
+                                    <span asp-validation-for="AgeGroups" class="text-danger"></span>
+                                    <input type="text" asp-for="AgeGroups" class="form-control" placeholder="Enter AgeGroups">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Enter Fees</label>
+                                    <span asp-validation-for="Fees" class="text-danger"></span>
+                                    <input type="number" asp-for="Fees" class="form-control" placeholder="Enter Fees">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Enter StartTiming</label>
+                                    <span asp-validation-for="StartTiming" class="text-danger"></span>
+                                    <input type="time" class="form-control" asp-for="StartTiming" placeholder="Enter Start Timing" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Enter EndTiming</label>
+                                    <span asp-validation-for="EndTiming" class="text-danger"></span>
+                                    <input type="time" class="form-control" asp-for="EndTiming" placeholder="Enter End Timing" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Enter Max Class Size</label>
+                                    <span asp-validation-for="MaxClassSize" class="text-danger"></span>
+                                    <input type="number" asp-for="MaxClassSize" class="form-control" placeholder="Enter Max Class Size">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Select Instructor</label>
+                                    <span asp-validation-for="InstructorID" class="text-danger"></span>
+                                    <select asp-for="InstructorID" class="form-control">
+                                        <option selected disabled value="0">Select Instructor</option>
+                                        @foreach (var instructor in ViewBag.Instructors)
+                                        {
+                                            <option value="@instructor.Id">@instructor.FullName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-success">Add Class</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const imagePreview = document.getElementById('imagePreview');
+    const imageLabel = document.querySelector('.image-label');
+    const imageInput = document.getElementById('image');
+
+    // If Image is not selected show sweet alert
+
+    $('#formClass').submit(function () {
+        if (imageInput.value === '') {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Please select an image',
+                icon: 'error',
+            });
+            return false;
+        }
+    });
+
+    imageInput.addEventListener('change', function () {
+        const file = this.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            imageLabel.textContent = file.name;
+
+            reader.onload = function () {
+                imagePreview.style.backgroundImage = `url('${this.result}')`;
+            }
+
+            reader.readAsDataURL(file);
+        }
+
+        if (imageInput.value === '') {
+            imageLabel.textContent = 'Choose Image';
+            imageLabel.style.color = 'red';
+            imageLabel.style.fontWeight = 'bold';
+        } else {
+            imageLabel.textContent = imageInput.files[0].name;
+            imageLabel.style.color = 'green';
+        }
+    });
+</script>

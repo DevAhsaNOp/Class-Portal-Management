@@ -1,4 +1,6 @@
-﻿namespace Application.ClientFeatures.Instructor.Response;
+﻿using Application.ClientFeatures.Class.Response;
+
+namespace Application.ClientFeatures.Instructor.Response;
 
 public sealed record InstructorResponse
 {
@@ -13,6 +15,7 @@ public sealed record InstructorResponse
     public string Email { get; set; }
     public string Password { get; set; }
     public string Role { get; set; }
+    public List<ClassResponseV2> Classes { get; set; }
     public int Status { get; set; }
     public DateTime? CreatedAt { get; set; }
     public int? CreatedBy { get; set; }
@@ -35,5 +38,11 @@ public sealed record InstructorResponseV2
     public string Email { get; set; }
     public int Status { get; set; }
     public DateTime? CreatedAt { get; set; }
+}
+
+public sealed record InstructorInfo
+{
+    public int Id { get; set; }
+    public string FullName { get; set; }
 }
 

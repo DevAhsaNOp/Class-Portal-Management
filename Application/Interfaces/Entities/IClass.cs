@@ -8,10 +8,10 @@ namespace Application.Interfaces.ClientInterfaces
 {
     public interface IClass : IBaseClientRepository<tblClass>
     {
-        Task<GenericResponse<dynamic>> Create(ClassCreateRequest request, CancellationToken cancellationToken);
-        Task<GenericResponse<dynamic>> Update(ClassUpdateRequest request, CancellationToken cancellationToken);
-        Task<GenericResponse<dynamic>> Delete(ClassDeleteRequest request, CancellationToken cancellationToken);
-        Task<List<ClassResponse>> GetByStatuses(CancellationToken cancellationToken);
-        Task<ClassResponse> GetById(long Id, CancellationToken cancellationToken);
+        Task<GenericResponse<dynamic>> Create(ClassCreateRequest request, CancellationToken cancellationToken = default);
+        Task<GenericResponse<dynamic>> Update(ClassUpdateRequest request, CancellationToken cancellationToken = default);
+        Task<GenericResponse<dynamic>> Delete(ClassDeleteRequest request, CancellationToken cancellationToken = default);
+        Task<List<ClassResponse>> GetByStatuses(CancellationToken cancellationToken = default);
+        Task<ClassResponse> GetById(long Id, CancellationToken cancellationToken = default);
     }
 }

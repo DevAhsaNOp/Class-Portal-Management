@@ -1,0 +1,240 @@
+﻿@using Application.ClientFeatures.Instructor.Response
+@model InstructorResponse
+
+@{
+    ViewData["Title"] = "Instructor Detail- KidKinder Admin";
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+<style>
+    body {
+        background: #f8f8f8 !important;
+    }
+
+    .image-preview, #callback-preview {
+        width: 150px;
+        height: 150px;
+        background-size: cover;
+        border: 2px solid #ddd;
+        border-radius: 50%;
+        position: relative;
+        overflow: hidden;
+        background-color: #eee;
+        color: #ecf0f1;
+    }
+
+        .image-preview input, #callback-preview input {
+            line-height: 200px;
+            font-size: 200px;
+            position: absolute;
+            opacity: 0;
+            z-index: 10;
+        }
+
+        .image-preview label, #callback-preview label {
+            position: absolute;
+            z-index: 5;
+            opacity: 0.8;
+            cursor: pointer;
+            background-color: #fff;
+            width: 150px;
+            height: 50px;
+            font-size: 12px;
+            line-height: 50px;
+            text-transform: uppercase;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            text-align: center;
+            color: #000;
+        }
+</style>
+
+@* Add Page Navigation Here *@
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Instructor</a></li>
+        <li class="breadcrumb-item"><a href="#">View Instructor</a></li>
+    </ol>
+</nav>
+
+<div class="container-fluid my-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-sm-12 col-md-8 col-lg-8 ">
+            <div class="card">
+                <div class="card-header bg-info">
+                    <h4 class="card-title text-white font-weight-bolder">
+                        View Instructor
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible show fade">
+                            <div class="alert-body">
+                                <button class="close" data-dismiss="alert">
+                                    <span>×</span>
+                                </button>
+                                @Html.Raw(TempData["Success"])
+                            </div>
+                        </div>
+                    }
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible show fade">
+                            <div class="alert-body">
+                                <button class="close" data-dismiss="alert">
+                                    <span>×</span>
+                                </button>
+                                @Html.Raw(TempData["Error"])
+                            </div>
+                        </div>
+                    }
+                    <input type="hidden" asp-for="Id" value="@Model.Id" />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div style="display: flex; justify-content: center;">
+                                <div id="image-preview" class="image-preview">
+                                    @if (Model.Image != null)
+                                    {
+                                        <img id="dynamicImage" src="@Model.Image" alt="Profile Image" width="150" height="150" style="border-radius: 50%;" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="fullname">Fullname</label>
+                                <span class="form-control">@Model.FullName</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <span class="form-control">@Model.Username</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="fullname">Gender</label>
+                                <span class="form-control">@Model.Gender</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Qualification</label>
+                                <span class="form-control">@Model.Qualification</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <span class="form-control">@Model.Email</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Role</label>
+                                <span class="form-control">@Model.Role</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Age</label>
+                                <span class="form-control">@Model.Age</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Joined Date</label>
+                                <span class="form-control">@Model.DateOfJoined.ToString("dd-MMM-yyyy hh:mm tt")</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Current Status</label>
+                                @{
+                                    if (Model.Status == 1)
+                                    {
+                                        <span class="form-control"><span class="badge badge-success">Active</span></span>
+                                    }
+                                    else
+                                    {
+                                        <span class="form-control"><span class="badge badge-danger">InActive</span></span>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="@Url.Action("Instructors", "Instructor")" class="btn btn-secondary">Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (Model.Classes is not null && Model.Classes.Count > 0)
+    {
+        <div class="row my-4">
+            <div class="col-md-12 col-sm-12 col-lg-12">
+                <h2 class="bg-primary rounded p-2 text-white">Classes Instructor is Teaching</h2>
+                <table class="table table-bordered">
+                    <thead class="table-info">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Class Id</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Class Name</th>
+                            <th scope="col">Grade Level</th>
+                            <th scope="col">Start Timing</th>
+                            <th scope="col">End Timing</th>
+                            <th scope="col">Class size</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var count = 1;
+                            foreach (var cclass in Model.Classes)
+                            {
+                                <tr>
+                                    <td scope="row">@count</td>
+                                    <td>@cclass.Id</td>
+                                    <td><img src="@cclass.Image" width="80" height="50" alt="UserImage @cclass.ClassName" /></td>
+                                    <td>@cclass.ClassName</td>
+                                    <td>@cclass.GradeLevel</td>
+                                    <td>@cclass.StartTiming.ToString("hh:mm tt")</td>
+                                    <td>@cclass.EndTiming.ToString("hh:mm tt")</td>
+                                    <td>@cclass.MaxClassSize</td>
+                                    @if (cclass.Status == 1)
+                                    {
+                                        <td><span class="badge badge-success" style="font-size: 12px !important">Active</span></td>
+                                    }
+                                    else
+                                    {
+                                        <td><span class="badge badge-danger" style="font-size: 12px !important">Inactive</span></td>
+
+                                    }
+                                </tr>
+                                count++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
