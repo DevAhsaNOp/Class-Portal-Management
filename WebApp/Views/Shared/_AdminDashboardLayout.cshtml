@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title></title>
+    <title>@ViewData["Title"]</title>
     <meta charset="utf-8" />
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -82,6 +82,20 @@
                             </li>
                             <li>
                                 <a href="@Url.Action("Add", "Class")">Add New Class</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#enrSubmenu"
+                           data-toggle="collapse"
+                           aria-expanded="true"
+                           class="dropdown-toggle">Enrollments</a>
+                        <ul class="collapse list-unstyled show" id="enrSubmenu">
+                            <li>
+                                <a href="@Url.Action("Enrollments", "Enrollment")">List of Enrollments</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Add", "Enrollment")">Add New Enrollment</a>
                             </li>
                         </ul>
                     </li>

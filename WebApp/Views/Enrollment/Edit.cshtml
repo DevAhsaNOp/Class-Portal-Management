@@ -1,8 +1,8 @@
-﻿@using Application.ClientFeatures.User.Response
-@model UserResponseV2
+﻿@using Application.ClientFeatures.Enrollment.Request
+@model EnrollmentUpdateRequest
 
 @{
-    ViewData["Title"] = "User Detail - KidKinder Admin";
+    ViewData["Title"] = "Edit Enrollment - KidKinder Admin";
     Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
 }
 
@@ -56,8 +56,8 @@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">User</a></li>
-        <li class="breadcrumb-item"><a href="#">View User</a></li>
+        <li class="breadcrumb-item"><a href="#">Enrollment</a></li>
+        <li class="breadcrumb-item"><a href="#">Edit Enrollment</a></li>
     </ol>
 </nav>
 
@@ -67,11 +67,11 @@
             <div class="card">
                 <div class="card-header bg-info">
                     <h4 class="card-title text-white font-weight-bolder">
-                        View User
+                        Edit Enrollment
                     </h4>
                 </div>
                 <div class="card-body">
-                    <form method="post" asp-action="ChangeTheUserToActive" asp-controller="User">
+                    <form method="post" asp-action="Edit" asp-controller="Enrollment" id="formEnrollment">
                         @if (TempData["Success"] != null)
                         {
                             <div class="alert alert-success alert-dismissible show fade">
@@ -94,69 +94,63 @@
                                 </div>
                             </div>
                         }
-                        <input type="hidden" asp-for="Id" value="@Model.Id" />
+                        <input type="hidden" asp-for="Id" style="display: none !important; visibility: hidden !important;" />
                         <div class="row">
-                            <div class="col-md-12">
-                                <div style="display: flex; justify-content: center;">
-                                    <div id="image-preview" class="image-preview">
-                                        @if (Model.Image != null)
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Select Class</label>
+                                    <span asp-validation-for="ClassID" class="text-danger"></span>
+                                    <select asp-for="ClassID" class="form-control">
+                                        <option disabled value="0">Select Class</option>
+                                        @foreach (var _class in ViewBag.Classes)
                                         {
-                                            <img id="dynamicImage" src="@Model.Image" alt="Profile Image" width="150" height="150" style="border-radius: 50%;" />
+                                            if (_class.Id == Model.ClassID)
+                                            {
+                                                <option value="@_class.Id" selected>@_class.ClassName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@_class.Id">@_class.ClassName</option>
+                                            }
                                         }
-                                    </div>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Select User</label>
+                                    <span asp-validation-for="UserID" class="text-danger"></span>
+                                    <select asp-for="UserID" class="form-control">
+                                        <option disabled value="0">Select User</option>
+                                        @foreach (var _user in ViewBag.Users)
+                                        {
+                                            if (_user.Id == Model.UserID)
+                                            {
+                                                <option value="@_user.Id" selected>@_user.FullName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@_user.Id">@_user.FullName</option>
+                                            }
+                                        }
+                                    </select>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="fullname">Fullname</label>
-                                    <span class="form-control">@Model.FullName</span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Username</label>
-                                    <span class="form-control">@Model.Username</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Email</label>
-                                    <span class="form-control">@Model.Email</span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Role</label>
-                                    <span class="form-control">@Model.Role</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Current Status</label>
-                                    @{
-                                        if (Model.Status == 1)
-                                        {
-                                            <span class="form-control"><span class="badge badge-success">Active</span></span>
-                                        }
-                                        else
-                                        {
-                                            <span class="form-control"><span class="badge badge-danger">InActive</span></span>
-                                        }
-                                    }
+                                    <label for="fullname">Enter Enrollment Date</label>
+                                    <span asp-validation-for="EnrollmentDate" class="text-danger"></span>
+                                    <input type="date" asp-for="EnrollmentDate" class="form-control" value="@Model.EnrollmentDate.ToString("yyyy-MM-dd")" placeholder="Enter EnrollmentDate">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-success">Active User</button>
-                                    <a href="@Url.Action("NonActiveUsers","User")" class="btn btn-danger">Cancel</a>
+                                    <button type="submit" class="btn btn-success">Edit Enrollment</button>
+                                    <a href="@Url.Action("Enrollments", "Enrollment")" type="submit" class="btn btn-danger">Cancel</a>
                                 </div>
                             </div>
                         </div>

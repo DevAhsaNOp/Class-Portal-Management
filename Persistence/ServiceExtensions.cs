@@ -27,6 +27,7 @@ namespace Persistence
             services.AddScoped<IClass, ClassRepository>();
             services.AddScoped<IHelper, HelperRepository>();
             services.AddScoped<IInstructor, InstructorRepository>();
+            services.AddScoped<IEnrollment, EnrollmentRepository>();
             services.AddScoped<ICustomLogHandler>(_ => new CustomLogHandler("Logs"));
         }
     }

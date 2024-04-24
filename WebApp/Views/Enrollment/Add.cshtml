@@ -1,0 +1,104 @@
+﻿@using Application.ClientFeatures.Enrollment.Request
+@model EnrollmentCreateRequest
+
+@{
+    ViewData["Title"] = "Add Enrollment - KidKinder Admin";
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+<style>
+    body {
+        background: #f8f8f8 !important;
+    }
+</style>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Enrollment</a></li>
+        <li class="breadcrumb-item"><a href="#">Add Enrollment</a></li>
+    </ol>
+</nav>
+
+<div class="container-fluid my-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-sm-12 col-md-8 col-lg-8 ">
+            <div class="card">
+                <div class="card-header bg-info">
+                    <h4 class="card-title text-white font-weight-bolder">
+                        Add Enrollment
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-action="Add" asp-controller="Enrollment" id="formEnrollment" enctype="multipart/form-data">
+                        @if (TempData["Success"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible show fade">
+                                <div class="alert-body">
+                                    <button class="close" data-dismiss="alert">
+                                        <span>×</span>
+                                    </button>
+                                    @Html.Raw(TempData["Success"])
+                                </div>
+                            </div>
+                        }
+                        @if (TempData["Error"] != null)
+                        {
+                            <div class="alert alert-danger alert-dismissible show fade">
+                                <div class="alert-body">
+                                    <button class="close" data-dismiss="alert">
+                                        <span>×</span>
+                                    </button>
+                                    @Html.Raw(TempData["Error"])
+                                </div>
+                            </div>
+                        }
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Select User</label>
+                                    <span asp-validation-for="UserID" class="text-danger"></span>
+                                    <select asp-for="UserID" class="form-control">
+                                        <option selected disabled value="0">----Select User----</option>
+                                        @foreach (var user in ViewBag.Users)
+                                        {
+                                            <option value="@user.Id">@user.FullName (@user.Username)</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Select Class</label>
+                                    <span asp-validation-for="ClassID" class="text-danger"></span>
+                                    <select asp-for="ClassID" class="form-control">
+                                        <option selected disabled value="0">----Select Class----</option>
+                                        @foreach (var _class in ViewBag.Classes)
+                                        {
+                                            <option value="@_class.Id">@_class.ClassName (@_class.GradeLevel)</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Enter Enrolled Date</label>
+                                    <span asp-validation-for="EnrollmentDate" class="text-danger"></span>
+                                    <input type="date" class="form-control" asp-for="EnrollmentDate" placeholder="Enter Enroll Date" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-success">Enroll User</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

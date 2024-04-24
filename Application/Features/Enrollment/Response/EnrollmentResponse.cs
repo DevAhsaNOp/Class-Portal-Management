@@ -5,8 +5,10 @@ public sealed record EnrollmentResponse
     public int Id { get; set; }
     public int UserID { get; set; }
     public string UserName { get; set; }
+    public string UserImage { get; set; }
     public int ClassID { get; set; }
     public string ClassName { get; set; }
+    public int GradeLevel { get; set; }
     public int InstructorID { get; set; }
     public string InstructorName { get; set; }
     public DateTime EnrollmentDate { get; set; }

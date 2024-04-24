@@ -1,20 +1,19 @@
-﻿@using Application.ClientFeatures.User.Response
-@model List<UserResponseV2>
+﻿@using Application.ClientFeatures.Enrollment.Response
+@model List<EnrollmentResponse>
 
 @{
-    ViewBag.Title = "Active Users - KidKinder Admin";
+    ViewBag.Title = "Enrollments - KidKinder Admin";
     Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
 }
-
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <h3 class="my-4 font-weight-normal bg-info text-white p-2 rounded">Enrolled Users List</h3>
-            <a href="@Url.Action("Add","User")" class="btn btn-success float-right">Add New User</a>
+            <h3 class="my-4 font-weight-normal bg-info text-white p-2 rounded">All Available Enrollmentes List</h3>
+            <a href="@Url.Action("Add", "Enrollment")" class="btn btn-success float-right">Enroll User</a>
         </div>
         <div class="col-md-12">
-            <h1>Users</h1>
+            <h1>User Enrollments</h1>
             @if (TempData["Success"] != null)
             {
                 <div class="alert alert-success alert-dismissible show fade">
@@ -41,13 +40,12 @@
                 <thead class="table-info">
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">UserId</th>
-                        <th scope="col">FullName</th>
-                        <th scope="col">Username</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Role</th>
-                        <th scope="col">Status</th>
+                        <th scope="col">Enrolled Id</th>
+                        <th scope="col">User Name</th>
+                        <th scope="col">Class Name</th>
+                        <th scope="col">Instructor Name</th>
                         <th scope="col">Enrolled Date</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -59,10 +57,10 @@
                             <tr>
                                 <td scope="row">@count</td>
                                 <td>@user.Id</td>
-                                <td>@user.FullName</td>
-                                <td>@user.Username</td>
-                                <td>@user.Email</td>
-                                <td>@user.Role</td>
+                                <td>@user.UserName</td>
+                                <td>@user.ClassName</td>
+                                <td>@user.InstructorName</td>
+                                <td>@user.EnrollmentDate.ToString("dd-MMM-yyyy")</td>
                                 @if (user.Status == 1)
                                 {
                                     <td><span class="badge badge-success" style="font-size: 12px !important">Active</span></td>
@@ -75,13 +73,12 @@
                                 {
                                     <td><span class="badge badge-danger" style="font-size: 12px !important">Inactive</span></td>
                                 }
-                                <td>@user.CreatedAt.Value.ToString("dd-MM-yyyy hh:mm tt")</td>
                                 @if (user.Status != 3)
                                 {
                                     <td>
-                                        <a href="@Url.Action("UserDetail", "User", new { id = user.Id })" class="btn btn-info">View</a>
-                                        <a href="@Url.Action("Edit", "User", new { id = user.Id })" class="btn btn-primary">Edit</a>
-                                        <a href="@Url.Action("Delete", "User", new { id = user.Id })" id="deleteUser" class="btn btn-danger">Delete</a>
+                                        <a href="@Url.Action("Detail", "Enrollment", new { id = user.Id })" class="btn btn-info">View</a>
+                                        <a href="@Url.Action("Edit", "Enrollment", new { id = user.Id })" class="btn btn-primary">Edit</a>
+                                        <a href="@Url.Action("Delete", "Enrollment", new { id = user.Id })" id="deleteEnrollment" class="btn btn-danger">Delete</a>
                                     </td>
                                 }
                             </tr>
@@ -94,10 +91,8 @@
     </div>
 </div>
 <script>
-    // Show Sweet Alert When Click On Delete to Confirm
-
     $(document).ready(function () {
-        $('#deleteUser').click(function (e) {
+        $('#deleteEnrollment').click(function (e) {
             e.preventDefault();
             var url = $(this).attr('href');
             Swal.fire({

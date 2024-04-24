@@ -1,0 +1,175 @@
+﻿@using Application.ClientFeatures.Enrollment.Response
+@model EnrollmentResponse
+
+@{
+    ViewData["Title"] = "Enrollment Detail- KidKinder Admin";
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+<style>
+    body {
+        background: #f8f8f8 !important;
+    }
+
+    .image-preview, #callback-preview {
+        width: 150px;
+        height: 150px;
+        background-size: cover;
+        border: 2px solid #ddd;
+        border-radius: 50%;
+        position: relative;
+        overflow: hidden;
+        background-color: #eee;
+        color: #ecf0f1;
+    }
+
+        .image-preview input, #callback-preview input {
+            line-height: 200px;
+            font-size: 200px;
+            position: absolute;
+            opacity: 0;
+            z-index: 10;
+        }
+
+        .image-preview label, #callback-preview label {
+            position: absolute;
+            z-index: 5;
+            opacity: 0.8;
+            cursor: pointer;
+            background-color: #fff;
+            width: 150px;
+            height: 50px;
+            font-size: 12px;
+            line-height: 50px;
+            text-transform: uppercase;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            text-align: center;
+            color: #000;
+        }
+</style>
+
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Enrollment</a></li>
+        <li class="breadcrumb-item"><a href="#">View Enrollment</a></li>
+    </ol>
+</nav>
+
+<div class="container-fluid my-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-sm-12 col-md-8 col-lg-8 ">
+            <div class="card">
+                <div class="card-header bg-info">
+                    <h4 class="card-title text-white font-weight-bolder">
+                        View Enrollment
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible show fade">
+                            <div class="alert-body">
+                                <button class="close" data-dismiss="alert">
+                                    <span>×</span>
+                                </button>
+                                @Html.Raw(TempData["Success"])
+                            </div>
+                        </div>
+                    }
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible show fade">
+                            <div class="alert-body">
+                                <button class="close" data-dismiss="alert">
+                                    <span>×</span>
+                                </button>
+                                @Html.Raw(TempData["Error"])
+                            </div>
+                        </div>
+                    }
+                    <div class="row my-3">
+                        <div class="col-md-12">
+                            <div style="display: flex; justify-content: center;">
+                                <div id="image-preview" class="image-preview">
+                                    @if (Model.UserImage != null)
+                                    {
+                                        <img id="dynamicImage" src="@Model.UserImage" alt="Profile Image" width="150" height="150" style="border-radius: 50%;" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>User Name</label>
+                                <span class="form-control">@Model.UserName</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Instructor Name</label>
+                                <span class="form-control">@Model.InstructorName</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Class Name</label>
+                                <span class="form-control">@Model.ClassName</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Grade Level</label>
+                                <span class="form-control">@Model.GradeLevel</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>StartTiming</label>
+                                <span class="form-control">@Model.EnrollmentDate.ToString("dd-MMMM-yyyy")</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Current Status</label>
+                                @{
+                                    if (Model.Status == 1)
+                                    {
+                                        <span class="form-control"> <span class="badge badge-success">Active</span></span>
+                                    }
+                                    else if (Model.Status == 3)
+                                    {
+                                        <span class="form-control"> <span class="badge badge-warning">Deleted</span></span>
+                                    }
+                                    else
+                                    {
+                                        <span class="form-control"> <span class="badge badge-danger">Inactive</span></span>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <a href="@Url.Action("Enrollments", "Enrollment")" type="submit" class="btn btn-secondary">Back</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
