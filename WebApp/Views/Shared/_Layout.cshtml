@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>KidKinder - Class Portal Management</title>
+    <title>@ViewData["Title"] - KidKinder CMS</title>
     @* <title>@ViewData["Title"] - WebApp</title> *@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta content="KidKinder - Class Portal Management" name="keywords" />
@@ -24,6 +24,9 @@
     <!-- Libraries Stylesheet -->
     <link href="~/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
     <link href="~/lib/lightbox/css/lightbox.min.css" rel="stylesheet" />
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/jquery.uploadPreview.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="~/css/style.css" rel="stylesheet" />
@@ -55,21 +58,11 @@
             <div class="collapse navbar-collapse justify-content-between"
                  id="navbarCollapse">
                 <div class="navbar-nav font-weight-bold mx-auto py-0">
-                    <a href="index.html" class="nav-item nav-link">Home</a>
-                    <a href="about.html" class="nav-item nav-link">About</a>
-                    <a href="class.html" class="nav-item nav-link active">Classes</a>
-                    <a href="team.html" class="nav-item nav-link">Teachers</a>
-                    <a href="gallery.html" class="nav-item nav-link">Gallery</a>
-                    <div class="nav-item dropdown">
-                        <a href="#"
-                           class="nav-link dropdown-toggle"
-                           data-toggle="dropdown">Pages</a>
-                        <div class="dropdown-menu rounded-0 m-0">
-                            <a href="blog.html" class="dropdown-item">Blog Grid</a>
-                            <a href="single.html" class="dropdown-item">Blog Detail</a>
-                        </div>
-                    </div>
-                    <a href="contact.html" class="nav-item nav-link">Contact</a>
+                    <a href="@Url.Action("Index", "Home")" class="nav-item nav-link active">Home</a>
+                    <a href="@Url.Action("About", "Home")" class="nav-item nav-link">About</a>
+                    <a href="@Url.Action("Class", "Home")" class="nav-item nav-link">Classes</a>
+                    <a href="@Url.Action("Teachers", "Home")" class="nav-item nav-link">Teachers</a>
+                    <a href="@Url.Action("Contact", "Home")" class="nav-item nav-link">Contact</a>
                 </div>
                 @if (User.Identity.IsAuthenticated)
                 {
@@ -78,7 +71,7 @@
                             <a href="#"
                                class="dropdown-toggle btn btn-primary px-4"
                                data-toggle="dropdown">
-                                <img src="~/Assets/User/Ahsan Coat.jpg" alt="User Image" class="user-nav-img" />
+                                <img src="@User.Claims.FirstOrDefault(x => x.Type =="ProfileImage").Value" alt="User Image" class="user-nav-img" />
                                 <span style="padding-left: 5px">
                                     @User.Identity.Name
                                 </span>
@@ -221,18 +214,15 @@
     </a>
 
     <!-- JavaScript Libraries -->
-    <script src="~/js/jquery.min.js"></script>
     <script src="~/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/easing/easing.min.js"></script>
     <script src="~/lib/owlcarousel/owl.carousel.min.js"></script>
     <script src="~/lib/isotope/isotope.pkgd.min.js"></script>
     <script src="~/lib/lightbox/js/lightbox.min.js"></script>
-    <script src="~/js/jquery.uploadPreview.min.js"></script>
 
     <!-- Contact Javascript File -->
     <script src="~/mail/jqBootstrapValidation.min.js"></script>
     <script src="~/mail/contact.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Template Javascript -->
     <script src="~/js/main.js"></script>
