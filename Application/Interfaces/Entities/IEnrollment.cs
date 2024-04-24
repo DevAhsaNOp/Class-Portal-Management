@@ -13,5 +13,6 @@ namespace Application.Interfaces.ClientInterfaces
         Task<GenericResponse<dynamic>> Delete(EnrollmentDeleteRequest request, CancellationToken cancellationToken = default);
         Task<List<EnrollmentResponse>> GetByStatuses(CancellationToken cancellationToken = default);
         Task<EnrollmentResponse> GetById(long Id, CancellationToken cancellationToken = default);
+        Task<EnrollmentResponseV2> GetAllEnrolledUserByClassId(int ClassId, CancellationToken cancellationToken = default);
     }
 }

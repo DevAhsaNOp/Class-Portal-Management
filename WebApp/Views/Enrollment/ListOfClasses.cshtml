@@ -1,0 +1,89 @@
+﻿@using Application.ClientFeatures.Class.Response
+@model List<ClassResponse>
+
+@{
+    ViewBag.Title = "Enrollment Classes - KidKinder Admin";
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="my-4 font-weight-normal bg-info text-white p-2 rounded">All Available Classes List</h3>
+        </div>
+        <div class="col-md-12">
+            <h1>Classes</h1>
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible show fade">
+                    <div class="alert-body">
+                        <button class="close" data-dismiss="alert">
+                            <span>×</span>
+                        </button>
+                        @Html.Raw(TempData["Success"])
+                    </div>
+                </div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible show fade">
+                    <div class="alert-body">
+                        <button class="close" data-dismiss="alert">
+                            <span>×</span>
+                        </button>
+                        @Html.Raw(TempData["Error"])
+                    </div>
+                </div>
+            }
+            <table class="table table-bordered">
+                <thead class="table-info">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Class Id</th>
+                        <th scope="col">Class Name</th>
+                        <th scope="col">Grade Level</th>
+                        <th scope="col">Instructor Name</th>
+                        <th scope="col">Class size</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var count = 1;
+                        foreach (var user in Model)
+                        {
+                            <tr>
+                                <td scope="row">@count</td>
+                                <td>@user.Id</td>
+                                <td>@user.ClassName</td>
+                                <td>@user.GradeLevel</td>
+                                <td>@user.InstructorName</td>
+                                <td>@user.MaxClassSize</td>
+                                @if (user.Status == 1)
+                                {
+                                    <td><span class="badge badge-success" style="font-size: 12px !important">Active</span></td>
+                                }
+                                else if (user.Status == 3)
+                                {
+                                    <td><span class="badge badge-danger" style="font-size: 12px !important">Deleted</span></td>
+                                }
+                                else
+                                {
+                                    <td><span class="badge badge-danger" style="font-size: 12px !important">Inactive</span></td>
+                                }
+                                @if (user.Status != 3)
+                                {
+                                    <td>
+                                        <a href="@Url.Action("EnrolledUserOfClass", "Enrollment", new { id = user.Id })" class="btn btn-info">View</a>
+                                    </td>
+                                }
+                            </tr>
+                            count++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

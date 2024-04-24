@@ -21,3 +21,28 @@ public sealed record EnrollmentResponse
     public int? DeletedBy { get; set; }
 }
 
+public sealed record EnrollmentResponseV2
+{
+    public int ClassID { get; set; }
+    public string ClassName { get; set; }
+    public string AgeGroups { get; set; }
+    public string ClassImage { get; set; }
+    public int GradeLevel { get; set; }
+    public int InstructorID { get; set; }
+    public string InstructorName { get; set; }
+    public int Status { get; set; }
+    public List<UserEnrolledInfo> Users { get; set; }
+}
+
+public sealed record UserEnrolledInfo
+{
+    public int Id { get; set; }
+    public int UserID { get; set; }
+    public string Username { get; set; }
+    public string FullName { get; set; }
+    public string Email { get; set; }
+    public string UserImage { get; set; }
+    public string EnrollmentDate { get; set; }
+    public int Status { get; set; }
+}
+

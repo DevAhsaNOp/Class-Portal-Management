@@ -149,5 +149,25 @@ namespace WebApp.Controllers
                 return RedirectToAction("Enrollments", "Enrollment");
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ListOfClasses(CancellationToken cancellationToken)
+        {
+            var _Classes = await _class.GetByStatuses(cancellationToken);
+            return View(_Classes);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EnrolledUserOfClass(int id)
+        {
+            var response = await _enrollment.GetAllEnrolledUserByClassId(id);
+            if (response is null)
+            {
+                TempData["Error"] = "No user found.";
+                return RedirectToAction("Enrollments", "Enrollment");
+            }
+            else
+                return View(response);
+        }
     }
 }

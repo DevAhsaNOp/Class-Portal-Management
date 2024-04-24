@@ -47,13 +47,13 @@
                            class="dropdown-toggle">Users</a>
                         <ul class="collapse list-unstyled show" id="homeSubmenu">
                             <li>
-                                <a href="@Url.Action("Users", "User")">List of Users</a>
+                                <a href="@Url.Action("Add", "User")">Add New User</a>
                             </li>
                             <li>
                                 <a href="@Url.Action("NonActiveUsers", "User")">List of Non-Active User</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("Add", "User")">Add New User</a>
+                                <a href="@Url.Action("Users", "User")">List of Users</a>
                             </li>
                         </ul>
                     </li>
@@ -64,10 +64,10 @@
                            class="dropdown-toggle">Instructors</a>
                         <ul class="collapse list-unstyled show" id="pageSubmenu">
                             <li>
-                                <a href="@Url.Action("Instructors", "Instructor")">List of Instructors</a>
+                                <a href="@Url.Action("Add", "Instructor")">Add New Instructor</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("Add", "Instructor")">Add New Instructor</a>
+                                <a href="@Url.Action("Instructors", "Instructor")">List of Instructors</a>
                             </li>
                         </ul>
                     </li>
@@ -78,10 +78,10 @@
                            class="dropdown-toggle">Classes</a>
                         <ul class="collapse list-unstyled show" id="insSubmenu">
                             <li>
-                                <a href="@Url.Action("Classes", "Class")">List of Classes</a>
+                                <a href="@Url.Action("Add", "Class")">Add New Class</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("Add", "Class")">Add New Class</a>
+                                <a href="@Url.Action("Classes", "Class")">List of Classes</a>
                             </li>
                         </ul>
                     </li>
@@ -92,10 +92,13 @@
                            class="dropdown-toggle">Enrollments</a>
                         <ul class="collapse list-unstyled show" id="enrSubmenu">
                             <li>
+                                <a href="@Url.Action("Add", "Enrollment")">Add New Enrollment</a>
+                            </li>
+                            <li>
                                 <a href="@Url.Action("Enrollments", "Enrollment")">List of Enrollments</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("Add", "Enrollment")">Add New Enrollment</a>
+                                <a href="@Url.Action("ListOfClasses", "Enrollment")">List of Classes</a>
                             </li>
                         </ul>
                     </li>

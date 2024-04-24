@@ -236,5 +236,60 @@ namespace Persistence.Repositories.ClientRepositories
 
             return findEntity;
         }
+
+        public async Task<EnrollmentResponseV2> GetAllEnrolledUserByClassId(int ClassId, CancellationToken cancellationToken = default)
+        {
+            var findEntity = await FilterIQueryable(x => x.ClassID == ClassId && x.Status == 1)
+                .Include(x => x.Class)
+                .ThenInclude(x => x.Instructor)
+                .Select(x => new
+                {
+                    x.Id,
+                    x.UserID,
+                    x.User.Username,
+                    x.ClassID,
+                    x.Class.ClassName,
+                    x.Class.AgeGroups,
+                    ClassStatus = x.Class.Status,
+                    ClassImage = string.IsNullOrEmpty(x.Class.Image) ? string.Empty : string.Concat(AppSetting.DocumentUrl, "\\Assets\\", x.Class.Image),
+                    x.Class.GradeLevel,
+                    x.User.Email,
+                    x.User.FullName,
+                    Image = string.IsNullOrEmpty(x.User.Image) ? string.Empty : string.Concat(AppSetting.DocumentUrl, "\\Assets\\", x.User.Image),
+                    EnrollDate = x.EnrollmentDate.ToString("dd-MMM-yyyy"),
+                    x.Status,
+                    x.Class.InstructorID,
+                    InsName = x.Class.Instructor.FullName,
+                })
+                .ToListAsync(cancellationToken);
+
+            if (findEntity == null || findEntity.Count == 0)
+                return null;
+
+            var response = new EnrollmentResponseV2
+            {
+                ClassID = ClassId,
+                AgeGroups = findEntity.FirstOrDefault().AgeGroups,
+                ClassImage = findEntity.FirstOrDefault().ClassImage,
+                ClassName = findEntity.FirstOrDefault().ClassName,
+                InstructorName = findEntity.FirstOrDefault().InsName,
+                InstructorID = findEntity.FirstOrDefault().InstructorID,
+                GradeLevel = findEntity.FirstOrDefault().GradeLevel,
+                Status = findEntity.FirstOrDefault().ClassStatus,
+                Users = findEntity.Select(x => new UserEnrolledInfo
+                {
+                    Id = x.Id,
+                    UserID = x.UserID,
+                    Username = x.Username,
+                    FullName = x.FullName,
+                    Email = x.Email,
+                    UserImage = x.Image,
+                    EnrollmentDate = x.EnrollDate,
+                    Status = x.Status
+                }).ToList()
+            };
+
+            return response;
+        }
     }
 }
