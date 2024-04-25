@@ -6,6 +6,46 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@if (User.Identity.IsAuthenticated)
+{
+    <script>
+        function JoinClass(classId) {
+            Swal.fire({
+                title: "Do you want to enroll in this class",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Save",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var formData = new FormData();
+                    var enrollmentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+                    console.log('Date: ' + enrollmentDate);
+
+                    formData.append('ClassID', classId);
+                    formData.append('UserID', '@User.Claims.FirstOrDefault(x => x.Type == "UserId").Value');
+                    formData.append('EnrollmentDate', enrollmentDate);
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Enrollment/Add",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            Swal.fire("Congratulation you have been enrolled in this class!", "", "success");
+                        },
+                        error: function (response) {
+                            Swal.fire("Changes are not saved", "", "info");
+                        }
+                    });
+                } else if (result.isDenied) {
+                    Swal.fire("Changes are not saved", "", "info");
+                }
+            });
+        }
+    </script>
+}
+
 <!-- Header Start -->
 <div class="container-fluid bg-primary mb-5">
     <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 400px">
@@ -57,7 +97,7 @@
                                         <div class="col-6 py-1">$@_class.Fees / Month</div>
                                     </div>
                                 </div>
-                                <button type="submit" id="JoinClass" class="btn btn-primary px-4 mx-auto mb-4">Join Now</button>
+                                <button type="button" onclick="JoinClass(@_class.Id)" class="btn btn-primary JoinClass px-4 mx-auto mb-4">Join Now</button>
                             </div>
                         </div>
                     }
@@ -119,28 +159,3 @@
     </div>
 </div>
 <!-- Registration End -->
-
-@if (User.Identity.IsAuthenticated)
-{
-    <script>
-        $(document).ready(function () {
-            $('#JoinClass').click(function (e) {
-                e.preventDefault();
-                var url = $(this).attr('href');
-                Swal.fire({
-                    title: "Do you want to enroll in this class",
-                    icon: "question",
-                    showCancelButton: true,
-                    confirmButtonText: "Save",
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire("Congratulation you have been enrolled in this class!", "", "success");
-        @*                         window.location.href = url; *@
-                            } else if (result.isDenied) {
-                        Swal.fire("Changes are not saved", "", "info");
-                    }
-                });
-            });
-        });
-    </script>
-}

@@ -64,35 +64,49 @@
                     <a href="@Url.Action("Teachers", "Home")" class="nav-item nav-link">Teachers</a>
                     <a href="@Url.Action("Contact", "Home")" class="nav-item nav-link">Contact</a>
                 </div>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <div class="navbar-nav">
-                        <div class="nav-item dropdown">
-                            <a href="#"
-                               class="dropdown-toggle btn btn-primary px-4"
-                               data-toggle="dropdown">
-                                <img src="@User.Claims.FirstOrDefault(x => x.Type =="ProfileImage").Value" alt="User Image" class="user-nav-img" />
-                                <span style="padding-left: 5px">
-                                    @User.Identity.Name
-                                </span>
-                           </a>
-                            <div class="dropdown-menu rounded-0 mt-1">
-                                <a href="@Url.Action("MyAccount", "Account")" class="dropdown-item">
-                                    <i class="fa fa-user" aria-hidden="true"></i>
-                                    My Profile
+                @{
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="navbar-nav">
+                            <div class="nav-item dropdown">
+                                <a href="#"
+                                   class="dropdown-toggle btn btn-primary px-4"
+                                   data-toggle="dropdown">
+                                    <img src="@User.Claims.FirstOrDefault(x => x.Type =="ProfileImage").Value" alt="User Image" class="user-nav-img" />
+                                    <span style="padding-left: 5px">
+                                        @User.Identity.Name
+                                    </span>
                                 </a>
-                                <a href="@Url.Action("ChangePassword", "Account")" class="dropdown-item">
-                                    <i class="fa fa-key" aria-hidden="true"></i>
-                                    Change Password
-                                </a>
-                                <a href="@Url.Action("Logout", "Account")" class="dropdown-item">
-                                    <i class="fa fa-sign-out-alt" aria-hidden="true"></i>
-                                    Logout
-                                </a>
+                                <div class="dropdown-menu rounded-0 mt-1">
+                                    <a href="@Url.Action("MyAccount", "Account")" class="dropdown-item">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                        My Profile
+                                    </a>
+                                    <a href="@Url.Action("ChangePassword", "Account")" class="dropdown-item">
+                                        <i class="fa fa-key" aria-hidden="true"></i>
+                                        Change Password
+                                    </a>
+                                    <a href="@Url.Action("Logout", "Account")" class="dropdown-item">
+                                        <i class="fa fa-sign-out-alt" aria-hidden="true"></i>
+                                        Logout
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
+                    else
+                    {
+                        <div class="navbar-nav">
+                            <div class="nav-item nav-link">
+                                <a href="@Url.Action("Login", "Account")" class="btn btn-primary px-4">Login</a>
+                            </div>
+                            <div class="nav-item nav-link">
+                                <a href="@Url.Action("Register", "Account")" class="btn btn-primary px-4">Register</a>
+                            </div>
+                        </div>
+                    }
                 }
+
                 @* <a href="" class="btn btn-primary px-4">Join Class</a> *@
             </div>
         </nav>
