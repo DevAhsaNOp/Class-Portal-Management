@@ -14,5 +14,6 @@ namespace Application.Interfaces.ClientInterfaces
         Task<List<EnrollmentResponse>> GetByStatuses(CancellationToken cancellationToken = default);
         Task<EnrollmentResponse> GetById(long Id, CancellationToken cancellationToken = default);
         Task<EnrollmentResponseV2> GetAllEnrolledUserByClassId(int ClassId, CancellationToken cancellationToken = default);
+        Task<List<EnrollmentResponse>> GetAllEnrolledClassByUserId(int UserId, CancellationToken cancellationToken = default);
     }
 }

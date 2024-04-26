@@ -291,5 +291,36 @@ namespace Persistence.Repositories.ClientRepositories
 
             return response;
         }
+
+        public async Task<List<EnrollmentResponse>> GetAllEnrolledClassByUserId(int UserId, CancellationToken cancellationToken = default)
+        {
+            var enrollments = await FilterIQueryable(x => x.UserID == UserId && x.Status == 1)
+                .Select(x => new EnrollmentResponse
+                {
+                    Id = x.Id,
+                    ClassID = x.ClassID,
+                    ClassName = x.Class.ClassName,
+                    UserImage = string.IsNullOrEmpty(x.User.Image) ? string.Empty : string.Concat(AppSetting.DocumentUrl, "\\Assets\\", x.User.Image),
+                    GradeLevel = x.Class.GradeLevel,
+                    UserID = x.UserID,
+                    UserName = x.User.FullName,
+                    InstructorID = x.Class.InstructorID,
+                    InstructorName = x.Class.Instructor.FullName,
+                    EnrollmentDate = x.EnrollmentDate,
+                    Status = x.Status,
+                    CreatedAt = x.CreatedAt,
+                    CreatedBy = x.CreatedBy,
+                    UpdatedAt = x.UpdatedAt,
+                    UpdatedBy = x.UpdatedBy,
+                    DeletedAt = x.DeletedAt,
+                    DeletedBy = x.DeletedBy,
+                })
+                .ToListAsync(cancellationToken);
+
+            if (enrollments == null || enrollments.Count == 0)
+                return null;
+
+            return enrollments;
+        }
     }
 }

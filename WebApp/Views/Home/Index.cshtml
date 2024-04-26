@@ -1,4 +1,4 @@
-﻿@model InstructorAndClassesVM
+﻿@model InstructorAndClassesAndEnrollmentVM
 
 @{
     ViewData["Title"] = "Home";
@@ -18,7 +18,7 @@
                 if (result.isConfirmed) {
                     var formData = new FormData();
                     var enrollmentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
-                    console.log('Date: '+enrollmentDate);
+                    console.log('Date: ' + enrollmentDate);
 
                     formData.append('ClassID', classId);
                     formData.append('UserID', '@User.Claims.FirstOrDefault(x => x.Type == "UserId").Value');
@@ -198,7 +198,23 @@
                                         <div class="col-6 py-1">$@_class.Fees / Month</div>
                                     </div>
                                 </div>
-                                <button type="button" onclick="JoinClass(@_class.Id)" class="btn btn-primary JoinClass px-4 mx-auto mb-4">Join Now</button>
+                                @{
+                                    if (User.Identity.IsAuthenticated)
+                                    {
+                                        if(Model.Enrollments is not null && Model.Enrollments.Any(x => x.ClassID == _class.Id))
+                                        {
+                                            <button type="button" class="btn btn-success px-4 mx-auto mb-4">Enrolled</button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" onclick="JoinClass(@_class.Id)" class="btn btn-primary JoinClass px-4 mx-auto mb-4">Join Now</button>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("Login", "Account")" class="btn btn-primary px-4 mx-auto mb-4">Login to Join</a>
+                                    }
+                                }
                             </div>
                         </div>
                     }
