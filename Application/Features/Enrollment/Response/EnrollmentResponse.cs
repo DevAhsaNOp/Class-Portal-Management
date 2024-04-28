@@ -8,6 +8,10 @@ public sealed record EnrollmentResponse
     public string UserImage { get; set; }
     public int ClassID { get; set; }
     public string ClassName { get; set; }
+    public string ClassImage { get; set; }
+    public string StartTiming { get; set; }
+    public string EndTiming { get; set; }
+    public string Description { get; set; }
     public int GradeLevel { get; set; }
     public int InstructorID { get; set; }
     public string InstructorName { get; set; }

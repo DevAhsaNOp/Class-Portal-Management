@@ -1,0 +1,89 @@
+﻿@using Application.ClientFeatures.Enrollment.Response
+@model List<EnrollmentResponse>
+
+@{
+    ViewData["Title"] = "My Classes - KidKinder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <style>
+        body {
+            background: #f8f8f8 !important;
+        }
+    </style>
+
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 400px">
+            <h3 class="display-3 font-weight-bold text-white">My Classes</h3>
+            <div class="d-inline-flex text-white">
+                <p class="m-0"><a class="text-white" href="">Home</a></p>
+                <p class="m-0 px-2">/</p>
+                <p class="m-0">My Classes</p>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+    <!-- Class Start -->
+    if (Model is not null && Model.Count > 0)
+    {
+        <div class="container-fluid pt-5">
+            <div class="container">
+                <div class="text-center pb-2">
+                    <h1 class="mb-4 font-weight-bolder">Enrolled Classes</h1>
+                </div>
+                <div class="row">
+                    @foreach (var _class in Model)
+                    {
+                        <div class="col-lg-5 mb-5">
+                            <div class="card border-0 bg-light shadow-sm pb-2">
+                                <img class="card-img-top mb-2" src="@_class.ClassImage" alt="">
+                                <div class="card-body text-center">
+                                    <h4 class="card-title">@_class.ClassName Class</h4>
+                                    <p class="card-text">@_class.Description?[0..Math.Min(_class.Description.Length, 80)]...</p>
+                                </div>
+                                <div class="card-footer bg-transparent py-4 px-5">
+                                    <div class="row border-bottom">
+                                        <div class="col-6 py-1 text-right border-right"><strong>Grade Level</strong></div>
+                                        <div class="col-6 py-1">@_class.GradeLevel</div>
+                                    </div>
+                                    <div class="row border-bottom">
+                                        <div class="col-6 py-1 text-right border-right"><strong>Instructor</strong></div>
+                                        <div class="col-6 py-1">@_class.InstructorName</div>
+                                    </div>
+                                    <div class="row border-bottom">
+                                        <div class="col-6 py-1 text-right border-right"><strong>Class Time</strong></div>
+                                        <div class="col-6 py-1">@_class.StartTiming - @_class.EndTiming</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6 py-1 text-right border-right"><strong>Enrollment Date</strong></div>
+                                        <div class="col-6 py-1">@_class.EnrollmentDate.ToString("dd-MMM-yyyy")</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    <!-- Class End-->
+}
+else
+{
+    <script>
+        Swal.fire({
+            title: 'Oops!',
+            text: 'You are not authorized to view this page. Please login to continue.',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/Account/Login";
+            }
+        });
+    </script>
+}
