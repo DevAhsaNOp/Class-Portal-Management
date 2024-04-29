@@ -1,5 +1,6 @@
 ﻿using Application.ClientFeatures.Enrollment.Request;
 using Application.Interfaces.ClientInterfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -11,6 +12,7 @@ namespace WebApp.Controllers
         private readonly IClass _class = _class;
         private readonly IEnrollment _enrollment = enrollment;
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Enrollments(CancellationToken cancellationToken)
         {
             var enrollments = await _enrollment.GetByStatuses(cancellationToken);
@@ -18,6 +20,7 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Detail(int id)
         {
             var enrollment = await _enrollment.GetById(id);
@@ -32,6 +35,7 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Add()
         {
             var classes = await _class.GetByStatuses();
@@ -54,6 +58,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Add(EnrollmentCreateRequest request)
         {
             request.CreatedBy = 1;
@@ -72,6 +77,7 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
             var enrollment = await _enrollment.GetById(id);
@@ -110,6 +116,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(EnrollmentUpdateRequest request)
         {
             request.UpdatedBy = 1;
@@ -128,6 +135,7 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var enrollmentDeleteRequest = new EnrollmentDeleteRequest
@@ -151,6 +159,7 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ListOfClasses(CancellationToken cancellationToken)
         {
             var _Classes = await _class.GetByStatuses(cancellationToken);
@@ -158,6 +167,7 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EnrolledUserOfClass(int id)
         {
             var response = await _enrollment.GetAllEnrolledUserByClassId(id);

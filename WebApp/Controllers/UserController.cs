@@ -1,12 +1,13 @@
 ﻿using Application.ClientFeatures.User.Request;
 using Application.ClientFeatures.User.Response;
 using Application.Interfaces.ClientInterfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using System.Security.Claims;
 
 namespace WebApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UserController(IUser user, IEnrollment enrollment) : Controller
     {
         private readonly IUser _user = user;
@@ -160,30 +161,6 @@ namespace WebApp.Controllers
             {
                 TempData["Error"] = _response.result;
                 return RedirectToAction("NonActiveUsers");
-            }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> MyClasses(string returnUrl, CancellationToken cancellationToken)
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                if (User.IsInRole("User"))
-                {
-                    var userId = Convert.ToInt32(User.FindFirstValue("UserId"));
-                    var enrollments = await _enrollment.GetAllEnrolledClassByUserId(userId, cancellationToken);
-                    return View(enrollments);
-                }
-                else
-                {
-                    TempData["Error"] = "You are not authorized";
-                    return Redirect(returnUrl);
-                }
-            }
-            else
-            {
-                TempData["Error"] = "You are not authenticated";
-                return RedirectToAction("Login", "Account");
             }
         }
     }

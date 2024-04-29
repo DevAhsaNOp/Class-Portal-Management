@@ -1,10 +1,12 @@
 ﻿using Application.ClientFeatures.Instructor.Request;
 using Application.Interfaces.ClientInterfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace WebApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class InstructorController(IInstructor instructor) : Controller
     {
         private readonly IInstructor _instructor = instructor;

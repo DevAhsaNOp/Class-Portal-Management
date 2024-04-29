@@ -1,10 +1,12 @@
 ﻿using Application.ClientFeatures.Class.Request;
 using Application.Interfaces.ClientInterfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace WebApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ClassController(IClass _class, IInstructor _instructor) : Controller
     {
         private readonly IClass _class = _class;
