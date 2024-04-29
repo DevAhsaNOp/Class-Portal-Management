@@ -10,9 +10,10 @@ using System.Security.Claims;
 namespace WebApp.Controllers
 {
     [Authorize]
-    public class AccountController(IUser user) : Controller
+    public class AccountController(IUser user, IEnrollment enrollment) : Controller
     {
         private readonly IUser _user = user;
+        private readonly IEnrollment _enrollment = enrollment;
 
         [HttpGet]
         [AllowAnonymous]
@@ -86,7 +87,11 @@ namespace WebApp.Controllers
                         };
 
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, props);
-                        return RedirectToAction("Index", "Home");
+
+                        if (userResponse.Role == "Admin")
+                            return RedirectToAction("Dashboard", "Admin");
+                        else
+                            return RedirectToAction("Index", "Home");
                     }
                     else
                         ModelState.AddModelError(string.Empty, "Your account is not active.");
@@ -109,6 +114,7 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> MyAccount()
         {
             var user = await _user.GetById(1);
@@ -130,6 +136,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> MyAccount(UserUpdateView user)
         {
             if (ModelState.IsValid)
@@ -153,6 +160,7 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, User")]
         public IActionResult ChangePassword()
         {
             var user = new UserChangePasswordRequest
@@ -163,6 +171,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> ChangePassword(UserChangePasswordRequest user)
         {
             if (ModelState.IsValid)
@@ -187,7 +196,34 @@ namespace WebApp.Controllers
             return View(user);
         }
 
+
         [HttpGet]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> MyClasses(string returnUrl, CancellationToken cancellationToken)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("User"))
+                {
+                    var userId = Convert.ToInt32(User.FindFirstValue("UserId"));
+                    var enrollments = await _enrollment.GetAllEnrolledClassByUserId(userId, cancellationToken);
+                    return View(enrollments);
+                }
+                else
+                {
+                    TempData["Error"] = "You are not authorized";
+                    return Redirect(returnUrl);
+                }
+            }
+            else
+            {
+                TempData["Error"] = "You are not authenticated";
+                return RedirectToAction("Login", "Account");
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

@@ -25,6 +25,11 @@ builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(60);
 });
+builder.Services.AddRazorPages()
+        .AddRazorPagesOptions(options =>
+        {
+            options.Conventions.AddPageRoute("/Error/Unauthorized", "/Home/Unauthorized");
+        });
 
 builder.Configuration.AddJsonFile(builder.Environment.ContentRootPath + @"\wwwroot\ResponseMessages\responseMessages.json", optional: true, reloadOnChange: true);
 
@@ -49,6 +54,7 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseStatusCodePagesWithRedirects("/Home/Unauthorized");
 
 app.MapControllerRoute(
     name: "default",

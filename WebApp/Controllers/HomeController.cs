@@ -71,5 +71,11 @@ namespace WebApp.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult Unauthorized()
+        {
+            return View();
+        }
     }
 }

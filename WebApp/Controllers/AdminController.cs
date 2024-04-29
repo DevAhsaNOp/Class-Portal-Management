@@ -1,9 +1,10 @@
 ﻿using Application.Interfaces.ClientInterfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers
 {
-    //[Authorize]
+    [Authorize(Roles = "Admin")]
     public class AdminController(IUser _user, IClass _class) : Controller
     {
         private readonly IUser _user = _user;
