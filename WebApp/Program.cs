@@ -44,7 +44,12 @@ if (dataContext != null)
 {
     AppSetting.TemplatePath = app.Environment.ContentRootPath + @"\wwwroot\Templates\Account";
     AppSetting.DocumentPath = app.Environment.ContentRootPath + @"\wwwroot\Assets\";
-    AppSetting.DocumentUrl = app.Configuration.GetSection("BaseURl").Value;
+    // Get Base URL From Environment Variables Docker Profile
+    var baseUrl = Environment.GetEnvironmentVariable("BASE_URL");
+    if (!string.IsNullOrEmpty(baseUrl))
+        AppSetting.DocumentUrl = baseUrl;
+    else
+        AppSetting.DocumentUrl = app.Configuration.GetSection("BaseURl").Value;
 }
 
 app.UseHttpsRedirection();
