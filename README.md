@@ -53,4 +53,4 @@ The project is implemented using the Asp.Net Core framework and Entity Framework
 6. Start using the application.
 7. To login as an admin, use the following credentials:
    - Email: ahnkhan804@gmail.com
-   - Password: Kalilinux2001@.
+   - Password: Admin123!
