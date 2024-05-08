@@ -28,6 +28,28 @@
     <!-- Header End -->
 
     <!-- Class Start -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible show fade">
+            <div class="alert-body">
+                <button class="close" data-dismiss="alert">
+                    <span>×</span>
+                </button>
+                @Html.Raw(TempData["Success"])
+            </div>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible show fade">
+            <div class="alert-body">
+                <button class="close" data-dismiss="alert">
+                    <span>×</span>
+                </button>
+                @Html.Raw(TempData["Error"])
+            </div>
+        </div>
+    }
     if (Model is not null && Model.Count > 0)
     {
         <div class="container-fluid pt-5">

@@ -27,100 +27,129 @@
         a[data-toggle="collapse"] {
             color: #ffecc9 !important;
         }
+
+        .logoutBtn {
+            font-weight: 700;
+            background: white;
+            color: black;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-    <div class="wrapper d-flex align-items-stretch">
-        <nav id="sidebar">
-            <div class="p-4 pt-5">
-                <a href="#"
-                   class="img logo rounded-circle mb-5"
-                   style="background-image: url(../assests/images/logo.jpg)"></a>
-                <ul class="list-unstyled components mb-5">
-                    <li class="active">
-                        <a href="@Url.Action("Dashboard", "Admin")">Home</a>
-                    </li>
-                    <li>
-                        <a href="#homeSubmenu"
-                           data-toggle="collapse"
-                           aria-expanded="true"
-                           class="dropdown-toggle">Users</a>
-                        <ul class="collapse list-unstyled show" id="homeSubmenu">
-                            <li>
-                                <a href="@Url.Action("Add", "User")">Add New User</a>
+    @{
+        if (User.Identity.IsAuthenticated)
+        {
+            <div class="wrapper d-flex align-items-stretch">
+                <nav id="sidebar">
+                    <div class="p-4 pt-5">
+                        <a href="#"
+                           class="img logo rounded-circle mb-5"
+                           style="background-image: url(../assests/images/logo.jpg)"></a>
+                        <ul class="list-unstyled components mb-5">
+                            <li class="active">
+                                <a href="@Url.Action("Dashboard", "Admin")">Home</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("NonActiveUsers", "User")">List of Non-Active User</a>
+                                <a href="@Url.Action("Index","Home")" style="color: #ffecc9 !important">Visit Website</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("Users", "User")">List of Users</a>
+                                <a href="#homeSubmenu"
+                                   data-toggle="collapse"
+                                   aria-expanded="true"
+                                   class="dropdown-toggle">Users</a>
+                                <ul class="collapse list-unstyled show" id="homeSubmenu">
+                                    <li>
+                                        <a href="@Url.Action("Add", "User")">Add New User</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("NonActiveUsers", "User")">List of Non-Active User</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Users", "User")">List of Users</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#pageSubmenu"
+                                   data-toggle="collapse"
+                                   aria-expanded="true"
+                                   class="dropdown-toggle">Instructors</a>
+                                <ul class="collapse list-unstyled show" id="pageSubmenu">
+                                    <li>
+                                        <a href="@Url.Action("Add", "Instructor")">Add New Instructor</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Instructors", "Instructor")">List of Instructors</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#insSubmenu"
+                                   data-toggle="collapse"
+                                   aria-expanded="true"
+                                   class="dropdown-toggle">Classes</a>
+                                <ul class="collapse list-unstyled show" id="insSubmenu">
+                                    <li>
+                                        <a href="@Url.Action("Add", "Class")">Add New Class</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Classes", "Class")">List of Classes</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#enrSubmenu"
+                                   data-toggle="collapse"
+                                   aria-expanded="true"
+                                   class="dropdown-toggle">Enrollments</a>
+                                <ul class="collapse list-unstyled show" id="enrSubmenu">
+                                    <li>
+                                        <a href="@Url.Action("Add", "Enrollment")">Add New Enrollment</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Enrollments", "Enrollment")">List of Enrollments</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("ListOfClasses", "Enrollment")">List of Classes</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="logoutBtn mt-2">
+                                <a href="@Url.Action("Logout", "Account")" style="color: #000 !important;">Logout</a>
                             </li>
                         </ul>
-                    </li>
-                    <li>
-                        <a href="#pageSubmenu"
-                           data-toggle="collapse"
-                           aria-expanded="true"
-                           class="dropdown-toggle">Instructors</a>
-                        <ul class="collapse list-unstyled show" id="pageSubmenu">
-                            <li>
-                                <a href="@Url.Action("Add", "Instructor")">Add New Instructor</a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("Instructors", "Instructor")">List of Instructors</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#insSubmenu"
-                           data-toggle="collapse"
-                           aria-expanded="true"
-                           class="dropdown-toggle">Classes</a>
-                        <ul class="collapse list-unstyled show" id="insSubmenu">
-                            <li>
-                                <a href="@Url.Action("Add", "Class")">Add New Class</a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("Classes", "Class")">List of Classes</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#enrSubmenu"
-                           data-toggle="collapse"
-                           aria-expanded="true"
-                           class="dropdown-toggle">Enrollments</a>
-                        <ul class="collapse list-unstyled show" id="enrSubmenu">
-                            <li>
-                                <a href="@Url.Action("Add", "Enrollment")">Add New Enrollment</a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("Enrollments", "Enrollment")">List of Enrollments</a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("ListOfClasses", "Enrollment")">List of Classes</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                <div class="footer">
-                    <p style="color: #ffffffd6 !important">
-                        Copyright &copy;
-                        <script>
-                            document.write(new Date().getFullYear());
-                        </script>
-                        All rights reserved
-                        <i class="icon-heart" aria-hidden="true"></i>
-                    </p>
+                        <div class="footer">
+                            <p style="color: #ffffffd6 !important">
+                                Copyright &copy;
+                                <script>
+                                    document.write(new Date().getFullYear());
+                                </script>
+                                All rights reserved
+                                <i class="icon-heart" aria-hidden="true"></i>
+                            </p>
+                        </div>
+                    </div>
+                </nav>
+                <div id="content">
+
+                    @RenderBody()
+
                 </div>
             </div>
-        </nav>
-        <div id="content">
-
-            @RenderBody()
-
-        </div>
-    </div>
+        }
+        else
+        {
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'You are not authorized to access this page!',
+                    footer: '<a href="@Url.Action("Login", "Account")">Login</a>'
+                });
+            </script>
+        }
+    }
 
     <script src="~/assests/js/popper.js"></script>
     <script src="~/assests/js/bootstrap.min.js"></script>

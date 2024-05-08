@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Security.Claims;
+using WebApp.Extensions;
 
 namespace WebApp.Controllers
 {
@@ -33,9 +34,12 @@ namespace WebApp.Controllers
                 user.CreatedBy = 1;
                 var response = await _user.Create(user);
                 if (response.code == HttpStatusCode.OK)
+                {
+                    TempData["Success"] = response.result;
                     return RedirectToAction("Index", "Home");
+                }
                 else
-                    ModelState.AddModelError(string.Empty, response.message);
+                    TempData["Error"] = response.result;
 
                 return View(user);
             }
@@ -86,6 +90,8 @@ namespace WebApp.Controllers
                             AllowRefresh = true,
                         };
 
+                        LoggedInUserDetail.SetUserDetails(userResponse.Id, userResponse.FullName, userResponse.Image, userResponse.Username,
+                            userResponse.Email, userResponse.Role);
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, props);
 
                         if (userResponse.Role == "Admin")
@@ -94,12 +100,11 @@ namespace WebApp.Controllers
                             return RedirectToAction("Index", "Home");
                     }
                     else
-                        ModelState.AddModelError(string.Empty, "Your account is not active.");
+                        TempData["Error"] = "Invalid username or password";
                 }
                 else
                 {
                     TempData["Error"] = response.result;
-                    ModelState.AddModelError(string.Empty, response.message);
                 }
             }
 
@@ -114,10 +119,10 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin, User")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> MyAccount()
         {
-            var user = await _user.GetById(1);
+            var user = await _user.GetById(LoggedInUserDetail.UserId);
             if (user == null)
                 return NotFound();
             else
@@ -131,17 +136,18 @@ namespace WebApp.Controllers
                     ProfileImage = user.Image,
                     Status = user.Status,
                 };
+                LoggedInUserDetail.SetUserDetails(user.Id, user.FullName, user.Image, user.Username, user.Email, user.Role);
                 return View(userResponseV2);
             }
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin, User")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> MyAccount(UserUpdateView user)
         {
             if (ModelState.IsValid)
             {
-                user.UpdatedBy = 1;
+                user.UpdatedBy = user.Id;
                 user.Status = 1;
                 var response = await _user.Update(user);
                 if (response.code == HttpStatusCode.OK)
@@ -150,49 +156,41 @@ namespace WebApp.Controllers
                     return RedirectToAction("MyAccount", "Account");
                 }
                 else
-                {
                     TempData["Error"] = response.result;
-                    ModelState.AddModelError(string.Empty, response.message);
-                }
             }
-
             return View(user);
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin, User")]
+        [Authorize(Roles = "User")]
         public IActionResult ChangePassword()
         {
             var user = new UserChangePasswordRequest
             {
-                Id = 1
+                Id = LoggedInUserDetail.UserId
             };
             return View(user);
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin, User")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> ChangePassword(UserChangePasswordRequest user)
         {
             if (ModelState.IsValid)
             {
-                user.UpdatedBy = 1;
+                user.UpdatedBy = user.Id;
                 user.Status = 1;
                 var response = await _user.ChangePassword(user);
                 if (response.code == HttpStatusCode.OK)
                 {
                     TempData["Success"] = response.result;
-                    // Logout the user
                     await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                     HttpContext.Session.Clear();
                     return RedirectToAction("Login", "Account");
                 }
                 else
-                {
                     TempData["Error"] = response.result;
-                }
             }
-
             return View(user);
         }
 
@@ -205,8 +203,7 @@ namespace WebApp.Controllers
             {
                 if (User.IsInRole("User"))
                 {
-                    var userId = Convert.ToInt32(User.FindFirstValue("UserId"));
-                    var enrollments = await _enrollment.GetAllEnrolledClassByUserId(userId, cancellationToken);
+                    var enrollments = await _enrollment.GetAllEnrolledClassByUserId(LoggedInUserDetail.UserId, cancellationToken);
                     return View(enrollments);
                 }
                 else
@@ -226,6 +223,7 @@ namespace WebApp.Controllers
         [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Logout()
         {
+            LoggedInUserDetail.ClearUserDetails();
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.Session.Clear();
             return RedirectToAction("Index", "Home");

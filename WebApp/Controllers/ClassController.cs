@@ -3,6 +3,7 @@ using Application.Interfaces.ClientInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using WebApp.Extensions;
 
 namespace WebApp.Controllers
 {
@@ -30,7 +31,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(ClassCreateRequest classRequest)
         {
-            classRequest.CreatedBy = 1;
+            classRequest.CreatedBy = LoggedInUserDetail.UserId;
             classRequest.Status = 1;
             var response = await _class.Create(classRequest);
             if (response.code == HttpStatusCode.OK)
@@ -81,7 +82,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(ClassUpdateRequest request)
         {
-            request.UpdatedBy = 1;
+            request.UpdatedBy = LoggedInUserDetail.UserId;
             request.Status = 1;
             var response = await _class.Update(request);
             if (response.code == HttpStatusCode.OK)
@@ -102,7 +103,7 @@ namespace WebApp.Controllers
             var classDeleteRequest = new ClassDeleteRequest
             {
                 Id = id,
-                DeletedBy = 1,
+                DeletedBy = LoggedInUserDetail.UserId,
                 Status = 3
             };
             var response = await _class.Delete(classDeleteRequest);

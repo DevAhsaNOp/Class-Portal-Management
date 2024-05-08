@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\Assets\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\assests\css\.DS_Store" />
     <None Include="wwwroot\assests\css\bootstrap\.DS_Store" />
     <None Include="wwwroot\assests\css\bootstrap\mixins\.DS_Store" />

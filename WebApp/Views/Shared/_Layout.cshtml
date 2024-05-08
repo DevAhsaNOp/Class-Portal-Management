@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using WebApp.Extensions
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -72,24 +73,34 @@
                                 <a href="#"
                                    class="dropdown-toggle btn btn-primary px-4"
                                    data-toggle="dropdown">
-                                    <img src="@User.Claims.FirstOrDefault(x => x.Type =="ProfileImage").Value" alt="User Image" class="user-nav-img" />
+                                    <img src="@LoggedInUserDetail.Image" alt="User Image" class="user-nav-img" />
                                     <span style="padding-left: 5px">
-                                        @User.Identity.Name
+                                        @LoggedInUserDetail.Username
                                     </span>
                                 </a>
                                 <div class="dropdown-menu rounded-0 mt-1">
-                                    <a href="@Url.Action("MyAccount", "Account")" class="dropdown-item">
-                                        <i class="fa fa-user" aria-hidden="true"></i>
-                                        My Profile
-                                    </a>
-                                    <a href="@Url.Action("MyClasses", "Account")" class="dropdown-item">
-                                        <i class="fa fa-user" aria-hidden="true"></i>
-                                        My Classes
-                                    </a>
-                                    <a href="@Url.Action("ChangePassword", "Account")" class="dropdown-item">
-                                        <i class="fa fa-key" aria-hidden="true"></i>
-                                        Change Password
-                                    </a>
+                                    @if (LoggedInUserDetail.Role.Equals("User", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <a href="@Url.Action("MyAccount", "Account")" class="dropdown-item">
+                                            <i class="fa fa-user" aria-hidden="true"></i>
+                                            My Profile
+                                        </a>
+                                        <a href="@Url.Action("MyClasses", "Account")" class="dropdown-item">
+                                            <i class="fa fa-user" aria-hidden="true"></i>
+                                            My Classes
+                                        </a>
+                                        <a href="@Url.Action("ChangePassword", "Account")" class="dropdown-item">
+                                            <i class="fa fa-key" aria-hidden="true"></i>
+                                            Change Password
+                                        </a>
+                                    }
+                                    @if (LoggedInUserDetail.Role.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <a href="@Url.Action("Dashboard", "Admin")" class="dropdown-item">
+                                            <i class="fa fa-user" aria-hidden="true"></i>
+                                            Admin Dashboard
+                                        </a>
+                                    }
                                     <a href="@Url.Action("Logout", "Account")" class="dropdown-item">
                                         <i class="fa fa-sign-out-alt" aria-hidden="true"></i>
                                         Logout

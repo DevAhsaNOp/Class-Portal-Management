@@ -3,6 +3,7 @@ using Application.Interfaces.ClientInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using WebApp.Extensions;
 
 namespace WebApp.Controllers
 {
@@ -61,7 +62,7 @@ namespace WebApp.Controllers
         [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Add(EnrollmentCreateRequest request)
         {
-            request.CreatedBy = 1;
+            request.CreatedBy = LoggedInUserDetail.UserId;
             request.Status = 1;
             var enrollment = await _enrollment.Create(request);
             if (enrollment.code == HttpStatusCode.OK)
@@ -119,7 +120,7 @@ namespace WebApp.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(EnrollmentUpdateRequest request)
         {
-            request.UpdatedBy = 1;
+            request.UpdatedBy = LoggedInUserDetail.UserId;
             request.Status = 1;
             var enrollment = await _enrollment.Update(request);
             if (enrollment.code == HttpStatusCode.OK)
@@ -141,7 +142,7 @@ namespace WebApp.Controllers
             var enrollmentDeleteRequest = new EnrollmentDeleteRequest
             {
                 Id = id,
-                DeletedBy = 1,
+                DeletedBy = LoggedInUserDetail.UserId,
                 Status = 3
             };
 

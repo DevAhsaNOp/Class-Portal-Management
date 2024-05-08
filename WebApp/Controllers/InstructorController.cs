@@ -3,6 +3,7 @@ using Application.Interfaces.ClientInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using WebApp.Extensions;
 
 namespace WebApp.Controllers
 {
@@ -34,7 +35,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(InstructorCreateRequest instructor, CancellationToken cancellationToken)
         {
-            instructor.CreatedBy = 1;
+            instructor.CreatedBy = LoggedInUserDetail.UserId;
             instructor.Status = 1;
             var response = await _instructor.Create(instructor, cancellationToken);
             if (response.code == HttpStatusCode.OK)
@@ -82,7 +83,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(InstructorUpdateRequest instructor, CancellationToken cancellationToken)
         {
-            instructor.UpdatedBy = 1;
+            instructor.UpdatedBy = LoggedInUserDetail.UserId;
             instructor.Status = 1;
             var response = await _instructor.Update(instructor, cancellationToken);
             if (response.code == HttpStatusCode.OK)
@@ -103,7 +104,7 @@ namespace WebApp.Controllers
             var deleteRequest = new InstructorDeleteRequest
             {
                 Id = id,
-                DeletedBy = 1,
+                DeletedBy = LoggedInUserDetail.UserId,
                 Status = 3
             };
             var response = await _instructor.Delete(deleteRequest);

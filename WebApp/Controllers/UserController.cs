@@ -4,6 +4,7 @@ using Application.Interfaces.ClientInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using WebApp.Extensions;
 
 namespace WebApp.Controllers
 {
@@ -36,7 +37,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(UserCreateRequest request)
         {
-            request.CreatedBy = 1;
+            request.CreatedBy = LoggedInUserDetail.UserId;
             request.Status = 1;
             var _response = await _user.Create(request);
             if (_response.code == HttpStatusCode.OK)
@@ -81,7 +82,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(UserUpdateRequest request)
         {
-            request.UpdatedBy = 1;
+            request.UpdatedBy = LoggedInUserDetail.UserId;
             request.Status = 1;
             var _response = await _user.Update(request);
             if (_response.code == HttpStatusCode.OK)
@@ -102,7 +103,7 @@ namespace WebApp.Controllers
             var user = new UserDeleteRequest
             {
                 Id = Id,
-                DeletedBy = 1,
+                DeletedBy = LoggedInUserDetail.UserId,
                 Status = 3
             };
             var _response = await _user.Delete(user);
@@ -149,7 +150,7 @@ namespace WebApp.Controllers
             {
                 Id = user.Id,
                 Status = 1,
-                UpdatedBy = 1
+                UpdatedBy = LoggedInUserDetail.UserId
             };
             var _response = await _user.ChangeUserStatus(userRequest);
             if (_response.code == HttpStatusCode.OK)

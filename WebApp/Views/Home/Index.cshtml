@@ -1,4 +1,5 @@
-﻿@model InstructorAndClassesAndEnrollmentVM
+﻿@using WebApp.Extensions
+@model InstructorAndClassesAndEnrollmentVM
 
 @{
     ViewData["Title"] = "Home";
@@ -21,7 +22,7 @@
                     console.log('Date: ' + enrollmentDate);
 
                     formData.append('ClassID', classId);
-                    formData.append('UserID', '@User.Claims.FirstOrDefault(x => x.Type == "UserId").Value');
+                    formData.append('UserID', '@LoggedInUserDetail.UserId');
                     formData.append('EnrollmentDate', enrollmentDate);
 
                     $.ajax({

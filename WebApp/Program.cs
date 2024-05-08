@@ -48,8 +48,6 @@ if (dataContext != null)
     var baseUrl = Environment.GetEnvironmentVariable("BASE_URL");
     if (!string.IsNullOrEmpty(baseUrl))
         AppSetting.DocumentUrl = baseUrl;
-    else
-        AppSetting.DocumentUrl = app.Configuration.GetSection("BaseURl").Value;
 }
 
 app.UseHttpsRedirection();
